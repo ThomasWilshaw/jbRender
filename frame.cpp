@@ -130,10 +130,3 @@ void Frame::DrawLine(double x0, double y0, double x1, double y1)
         }
     }
 }
-
-void Frame::swap(double& x, double& y)
-{
-    double temp = x;
-    x = y;
-    y = temp;
-}

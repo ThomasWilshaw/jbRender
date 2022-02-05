@@ -1,6 +1,9 @@
 
 #include <OpenEXR/ImfRgbaFile.h>
 
+#ifndef FRAME_H
+#define FRAME_H
+
 class Frame
 {
 public:
@@ -18,7 +21,12 @@ private:
 	double frac_part(const double x) { return x - floor(x); };
 	double inv_frac_part(const double x) { return 1.0 - frac_part(x); };
 
-	void swap(double& x, double& y);
+	void swap(double& x, double& y)
+	{
+		double temp = x;
+		x = y;
+		y = temp;
+	}
 
 
 	int x_res_;
@@ -26,3 +34,5 @@ private:
 
 	Imf::Rgba* rgba_data_;
 };
+
+#endif
