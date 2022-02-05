@@ -12,6 +12,7 @@
 #include <cassert>
 
 #include "frame.h"
+#include "object.h"
 
 using namespace Imf;
 using namespace Imath;
@@ -26,15 +27,7 @@ int main()
 
     frame.MoveTo(50, 50);
     frame.DrawTo(250, 51);
-    //frame.DrawTo(450, 450);
-    //frame.DrawTo(50, 450);
-    //frame.DrawTo(50, 50);
 
-    //frame.MoveTo(300, 300);
-    //frame.DrawTo(450, 350);
-    
-   // frame.MoveTo(300, 300);
-   // frame.DrawTo(450, 380);
 
     if (frame.WriteFrame()) {
         std::cout << "Frame written";
@@ -42,4 +35,8 @@ int main()
     else {
         std::cout << "Error";
     }
+
+    Object square("objects/square.obj");
+    square.PrintVerts();
+    square.PrintPolys();
 }
