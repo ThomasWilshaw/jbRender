@@ -24,11 +24,17 @@ int main()
     
     Frame frame(500, 500, Rgba(1.0, 1.0, 1.0, 1.0));
 
-    frame.DrawLine(50, 50, 450, 50);
-    frame.DrawLine(50, 50, 450, 70);
-    frame.DrawLine(50, 50, 450, 100);
-    frame.DrawLine(50, 50, 450, 150);
-    frame.DrawLine(50, 50, 450, 200);
+    frame.MoveTo(50, 50);
+    frame.DrawTo(250, 51);
+    //frame.DrawTo(450, 450);
+    //frame.DrawTo(50, 450);
+    //frame.DrawTo(50, 50);
+
+    //frame.MoveTo(300, 300);
+    //frame.DrawTo(450, 350);
+    
+   // frame.MoveTo(300, 300);
+   // frame.DrawTo(450, 380);
 
     if (frame.WriteFrame()) {
         std::cout << "Frame written";

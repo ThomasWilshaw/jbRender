@@ -16,6 +16,9 @@ public:
 
 	void DrawLine(double x0, double y0, double x1, double y1);
 
+	void DrawTo(double x, double y);
+	void MoveTo(double x, double y);
+
 private:
 	int int_part(const double x) { return (int)floor(x); };
 	double frac_part(const double x) { return x - floor(x); };
@@ -31,6 +34,9 @@ private:
 
 	int x_res_;
 	int y_res_;
+
+	double current_x_;
+	double current_y_;
 
 	Imf::Rgba* rgba_data_;
 };

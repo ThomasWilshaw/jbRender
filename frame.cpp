@@ -2,7 +2,9 @@
 
 Frame::Frame(int x, int y, Imf::Rgba colour) :
 	x_res_(x),
-	y_res_(y)
+	y_res_(y),
+    current_x_(0.0),
+    current_y_(0.0)
 {
     rgba_data_ = new Imf::Rgba[x_res_ * y_res_];
     for (int i = 0; i < x_res_ * y_res_; i++) {
@@ -75,6 +77,8 @@ void Frame::DrawLine(double x0, double y0, double x1, double y1)
         gradient = dy / dx;
     }
 
+    //https://stackoverflow.com/questions/68552675/what-is-the-endpoint-calculation-in-the-xiaolin-wu-algorithm-doing
+
     // First end point
     double x_end;
     double y_end;
@@ -93,10 +97,14 @@ void Frame::DrawLine(double x0, double y0, double x1, double y1)
 
     if (steep) {
         SetPixel(y_pxl_1, x_pxl_1, frac_part(y_end) * x_gap);
-        SetPixel(y_pxl_1 + 1, x_pxl_1, inv_frac_part(y_end) * x_gap);
+        if (frac_part(y_end) != 0) {
+            SetPixel(y_pxl_1 + 1, x_pxl_1, inv_frac_part(y_end) * x_gap);
+        }
     } else {
         SetPixel(x_pxl_1, y_pxl_1, frac_part(y_end) * x_gap);
-        SetPixel(x_pxl_1, y_pxl_1 + 1, inv_frac_part(y_end) * x_gap);
+        if (frac_part(y_end) != 0) {
+            SetPixel(x_pxl_1, y_pxl_1 + 1, inv_frac_part(y_end) * x_gap);
+        }
     }
 
     inter_y = y_end + gradient;
@@ -106,14 +114,18 @@ void Frame::DrawLine(double x0, double y0, double x1, double y1)
     y_end = y1 + gradient * (x_end - x1);
     x_gap = frac_part(x1 + 0.5);
     x_pxl_2 = x_end;
-    y_pxl_2 = int_part(x1 + 0.5);
+    y_pxl_2 = int_part(y_end);
 
     if (steep) {
         SetPixel(y_pxl_2, x_pxl_2, frac_part(y_end) * x_gap);
-        SetPixel(y_pxl_2 + 1, x_pxl_2, inv_frac_part(y_end) * x_gap);
+        if (frac_part(y_end) != 0) {
+            SetPixel(y_pxl_2 + 1, x_pxl_2, inv_frac_part(y_end) * x_gap);
+        }
     } else {
         SetPixel(x_pxl_2, y_pxl_2, frac_part(y_end) * x_gap);
-        SetPixel(x_pxl_2, y_pxl_2 + 1, inv_frac_part(y_end) * x_gap);
+        if (frac_part(y_end) != 0) {
+            SetPixel(x_pxl_2, y_pxl_2 + 1, inv_frac_part(y_end) * x_gap);
+        }
     }
 
     if (steep) {
@@ -129,4 +141,18 @@ void Frame::DrawLine(double x0, double y0, double x1, double y1)
             inter_y = inter_y + gradient;
         }
     }
+}
+
+void Frame::DrawTo(double x, double y)
+{
+    DrawLine(current_x_, current_y_, x, y);
+
+    current_x_ = x;
+    current_y_ = y;
+}
+
+void Frame::MoveTo(double x, double y)
+{
+    current_x_ = x;
+    current_y_ = y;
 }
