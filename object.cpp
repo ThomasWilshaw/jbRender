@@ -11,7 +11,7 @@ Object::Object(const std::string filename)
     std::ifstream in;
     in.open(filename, std::ifstream::in);
     if (in.fail()) {
-        std::cout << "ERROR: Failed to open " << filename;
+        std::cout << "ERROR: Failed to open object file:" << filename << std::endl;
         return;
     }
 

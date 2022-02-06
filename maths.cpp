@@ -71,8 +71,6 @@ void Matrix::SetRotation(double theta, axis j)
 	double s = sin(theta_rad);
 	double c = cos(theta_rad);
 
-	std::cout << "s: " << s << ", c: " << c << std::endl;
-
 	switch (j) {
 		case axis::kAxisX:
 			data_[1][1] = c;

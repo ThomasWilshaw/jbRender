@@ -10,6 +10,7 @@
 #include "maths.h"
 #include "object.h"
 #include "stack.h"
+#include "tokenizer.h"
 
 using namespace Imf;
 using namespace Imath;
@@ -19,7 +20,7 @@ using namespace Imath;
 int main()
 {
     Frame frame(1920, 1080, Rgba(1.0, 1.0, 1.0, 1.0));
-    
+    /*
 
     Object pyramid("objects/square_based_pyramid.obj");
     Object cube("objects/cube.obj");
@@ -68,7 +69,9 @@ int main()
     C.Multiply(T);
 
     frame.DrawObject(cube, C);
+    */
 
+    Tokenizer t("program.jbr", &frame);
 
     if (frame.WriteFrame()) {
         std::cout << "Frame written" << std::endl;
@@ -76,4 +79,6 @@ int main()
     else {
         std::cout << "Error";
     }
+
+    
 }
