@@ -156,3 +156,17 @@ void Frame::MoveTo(double x, double y)
     current_x_ = x;
     current_y_ = y;
 }
+
+void Frame::DrawObject(Object obj)
+{
+    vec3 start_vert = obj.Vert(0, 0);
+    MoveTo((start_vert.x+2)*100, (start_vert.y+2)*100);
+    for (int i = 0; i < obj.PolyCount(); i++) {
+        for (int j = 0; j < obj.Polys()[i].vert_count; j++) {
+            vec3 vert = obj.Vert(i, j);
+            DrawTo((vert.x+2)*100, (vert.y+2)*100);
+        }
+    }
+
+    DrawTo(start_vert.x, start_vert.y);
+}

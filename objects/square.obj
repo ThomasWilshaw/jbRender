@@ -1,8 +1,8 @@
 g MySquare
 
-v 0 0 0   # Bottom left.
-v 5 0 0   # Bottom right.
-v 5 5 0   # Top    right.
-v 0 5 0   # Top    left.
+v -1 -1 0   # Bottom left.
+v 1 -1 0   # Bottom right.
+v 1 1 0   # Top    right.
+v -1 1 0   # Top    left.
 
 f 1 2 3 4       # Square base.

@@ -36,12 +36,23 @@ Object::Object(const std::string filename)
                 std::cout << v;
                 p.verts.push_back(v-1);
             }
+            p.vert_count = p.verts.size();
             polys_.push_back(p);
             std::cout << polys_[0].verts[2];
         }
     }
 
     in.close();
+}
+
+int Object::PolyCount()
+{
+    return polys_.size();
+}
+
+std::vector<poly> Object::Polys()
+{
+    return polys_;
 }
 
 void Object::PrintVerts()

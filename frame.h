@@ -1,6 +1,8 @@
 
 #include <OpenEXR/ImfRgbaFile.h>
 
+#include "object.h"
+
 #ifndef FRAME_H
 #define FRAME_H
 
@@ -18,6 +20,8 @@ public:
 
 	void DrawTo(double x, double y);
 	void MoveTo(double x, double y);
+
+	void DrawObject(Object obj);
 
 private:
 	int int_part(const double x) { return (int)floor(x); };

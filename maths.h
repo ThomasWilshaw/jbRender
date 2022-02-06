@@ -18,6 +18,7 @@ struct vev4 {
 
 struct poly {
 	std::vector<int> verts;
+	int vert_count;
 };
 
 #endif
