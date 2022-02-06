@@ -35,7 +35,10 @@ public:
 
 	void SetIdentity();
 	void SetData(std::vector< std::vector<double> >);
+
 	void SetPerspective(double alpha, double zn, double zf);
+	void SetTranslate(double x, double y, double z);
+	void SetScale(double x, double y, double z);
 
 	void PrintMatrix() const;
 
@@ -79,6 +82,23 @@ static vec4 TransformVector(vec3 v, Matrix C)
 	v4.w = 1.0;
 	
 	return TransformVector(v4, C);
+}
+
+static vec3 DivideByW(vec4 v)
+{
+	vec3 output;
+	if (v.w != 0) {
+		output.x = v.x / v.w;
+		output.y = v.y / v.w;
+		output.z = v.z / v.w;
+	} else {
+		std::cout << "ERROR: DivideByW is divind by 0";
+		output.x = v.x;
+		output.y = v.y;
+		output.z = v.z;
+	}
+
+	return output;
 }
 
 #endif

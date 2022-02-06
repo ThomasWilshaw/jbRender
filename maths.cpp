@@ -39,6 +39,22 @@ void Matrix::SetPerspective(double alpha, double zn, double zf)
 	data_[3][2] = -Q * zn;
 }
 
+void Matrix::SetTranslate(double x, double y, double z)
+{
+	SetIdentity();
+	data_[3][0] = x;
+	data_[3][1] = y;
+	data_[3][2] = z;
+}
+
+void Matrix::SetScale(double x, double y, double z)
+{
+	SetIdentity();
+	data_[0][0] = x;
+	data_[1][1] = y;
+	data_[2][2] = z;
+}
+
 void Matrix::Multiply(Matrix T)
 {
 	data_[0][0] = data_[0][0] * T.data()[0][0] + data_[1][0] * T.data()[0][1] + data_[2][0] * T.data()[0][2] + data_[3][0] * T.data()[0][3];
