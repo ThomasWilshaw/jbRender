@@ -24,7 +24,8 @@ public:
 	void DrawTo(vec3 point);
 	void MoveTo(vec3 point);
 
-	void DrawObject(Object obj);
+	void DrawObject(Object obj, Matrix C);
+	vec3 PushVertThroughPipeline(vec3 vert, Matrix C);
 
 private:
 	int int_part(const double x) { return (int)floor(x); };
