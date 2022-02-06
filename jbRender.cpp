@@ -9,6 +9,7 @@
 #include "frame.h"
 #include "maths.h"
 #include "object.h"
+#include "stack.h"
 
 using namespace Imf;
 using namespace Imath;
@@ -22,17 +23,48 @@ int main()
 
     Object pyramid("objects/square_based_pyramid.obj");
     Object cube("objects/cube.obj");
+    Object ground("objects/ground.obj");
+
+    Stack stack;
+
     Matrix C;
     C.SetPerspective(45.0, 6.2, 50);
 
     Matrix T;
-    T.SetTranslate(0, -1.41, -15);
+    T.SetTranslate(0, -1.41, -9);
     C.Multiply(T);
 
-    T.SetRotation(-20, axis::kAxisY);
+    T.SetRotation(80, axis::kAxisX);
     C.Multiply(T);
 
-    T.SetScale(3, 3, 3);
+    T.SetRotation(48, axis::kAxisZ);
+    C.Multiply(T);
+
+    T.SetScale(-1, -1, 1);
+    C.Multiply(T);
+
+    stack.Push(C);
+
+    T.SetScale(-1, 1, 1);
+    C.Multiply(T);
+
+    frame.DrawObject(ground, C);
+
+    T.SetTranslate(0, 0, 1);
+    C.Multiply(T);
+
+    T.SetRotation(-20, axis::kAxisZ);
+    C.Multiply(T);
+
+    frame.DrawObject(cube, C);
+
+    C = stack.Pop();
+    stack.Push(C);
+
+    T.SetScale(0.3, 0.4, 0.5);
+    C.Multiply(T);
+
+    T.SetTranslate(-5, -3.8, 1);
     C.Multiply(T);
 
     frame.DrawObject(cube, C);
