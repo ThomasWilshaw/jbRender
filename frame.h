@@ -9,7 +9,7 @@
 class Frame
 {
 public:
-	Frame(int x, int y, Imf::Rgba color, int scale = 100);
+	Frame(int x, int y, Imf::Rgba color, int scale = 200);
 
 	bool WriteFrame(const char* filename = "out.exr");
 

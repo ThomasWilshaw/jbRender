@@ -23,6 +23,12 @@ struct poly {
 	int vert_count;
 };
 
+enum axis {
+	kAxisX,
+	kAxisY,
+	kAxisZ
+};
+
 
 /*
 * Matricies are stored in a row major order 
@@ -39,6 +45,7 @@ public:
 	void SetPerspective(double alpha, double zn, double zf);
 	void SetTranslate(double x, double y, double z);
 	void SetScale(double x, double y, double z);
+	void SetRotation(double theta, axis j);
 
 	void PrintMatrix() const;
 
@@ -63,7 +70,7 @@ private:
 // static functions
 
 static vec4 TransformVector(vec4 v, Matrix C) {
-	vec4 output;
+	struct vec4 output = {0, 0, 0, 1};
 
 	output.x = v.x * C.data()[0][0] + v.y * C.data()[1][0] + v.z * C.data()[2][0] + v.w * C.data()[3][0];
 	output.y = v.x * C.data()[0][1] + v.y * C.data()[1][1] + v.z * C.data()[2][1] + v.w * C.data()[3][1];

@@ -49,7 +49,7 @@ void Frame::SetPixel(int x, int y, Imf::Rgba color)
         rgba_data_[y * x_res_ + x].b *= color.b;
     }
     else {
-        std::cout << "Pixel " << x << "," << y << " is outside frame size." << std::endl;
+        //std::cout << "Pixel " << x << "," << y << " is outside frame size." << std::endl;
     }
 }
 

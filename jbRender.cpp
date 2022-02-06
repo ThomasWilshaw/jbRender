@@ -23,27 +23,20 @@ int main()
     Object pyramid("objects/square_based_pyramid.obj");
     Object cube("objects/cube.obj");
     Matrix C;
-    C.SetPerspective(45.0, 6.2, 11.8);
+    C.SetPerspective(45.0, 6.2, 50);
 
     Matrix T;
-    T.SetScale(5, 5, -1);
-    C.Multiply(T);
-    C.PrintMatrix();
-
-    T.SetTranslate(0, -1.41, 9);
+    T.SetTranslate(0, -1.41, -15);
     C.Multiply(T);
 
-    frame.DrawObject(pyramid, C);
-
-    T.SetTranslate(2, 0, 0);
+    T.SetRotation(-20, axis::kAxisY);
     C.Multiply(T);
 
-    frame.DrawObject(pyramid, C);
-
-    T.SetTranslate(2, 0, 0);
+    T.SetScale(3, 3, 3);
     C.Multiply(T);
 
     frame.DrawObject(cube, C);
+
 
     if (frame.WriteFrame()) {
         std::cout << "Frame written" << std::endl;
@@ -51,18 +44,4 @@ int main()
     else {
         std::cout << "Error";
     }
-    /*
-    Matrix C;
-    std::vector< std::vector<double> > c = { {2, 0, 0, 0}, {0, 2, 0, 0}, {0, 0, 2, 0}, {0, 0, 0, 2} };
-    C.SetData(c);
-    C.PrintMatrix();
-
-    Matrix T;
-    std::vector< std::vector<double> > t = { {3, 0, 0, 0}, {0, 3, 0, 0}, {0, 0, 3, 0}, {0, 0, 0, 3} };
-    T.SetData(t);
-    T.PrintMatrix();
-
-    C.Multiply(T);
-    C.PrintMatrix();
-    */
 }
