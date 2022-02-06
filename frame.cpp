@@ -1,3 +1,9 @@
+#include <OpenEXR/ImfInputFile.h>
+#include <OpenEXR/ImfChannelList.h>
+#include <OpenEXR/ImfFrameBuffer.h>
+#include <OpenEXR/ImfRgbaFile.h>
+#include <OpenEXR/half.h>
+
 #include"frame.h"
 
 Frame::Frame(int x, int y, Imf::Rgba colour, int scale) :

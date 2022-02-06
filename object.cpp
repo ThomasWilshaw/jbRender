@@ -33,12 +33,10 @@ Object::Object(const std::string filename)
             int v;
             poly p;
             while (iss >> v) {
-                std::cout << v;
                 p.verts.push_back(v-1);
             }
             p.vert_count = p.verts.size();
             polys_.push_back(p);
-            std::cout << polys_[0].verts[2];
         }
     }
 
