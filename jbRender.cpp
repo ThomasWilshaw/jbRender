@@ -23,21 +23,11 @@ int main()
 {
     std::cout << "Hello World!\n";
     
-    Frame frame(500, 500, Rgba(1.0, 1.0, 1.0, 1.0));
+    Frame frame(1920, 1080, Rgba(1.0, 1.0, 1.0, 1.0));
     
 
-    Object square("objects/square.obj");
+    Object square("objects/square_based_pyramid.obj");
     frame.DrawObject(square);
-
-    /*
-    frame.MoveTo(0, 0);
-    for (int i = 0; i < square.PolyCount(); i++) {
-        for (int j = 0; j < square.Polys()[i].verts.size(); j++) {
-            frame.DrawTo((square.Vert(i, j).x+1)*100, (square.Vert(i, j).y+1)*100);
-        }
-        frame.DrawTo((square.Vert(0, 0).x+1) * 100, (square.Vert(0, 0).y+1) * 100);
-    }
-    */
 
     if (frame.WriteFrame()) {
         std::cout << "Frame written";

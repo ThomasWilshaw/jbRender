@@ -1,8 +1,9 @@
 #include"frame.h"
 
-Frame::Frame(int x, int y, Imf::Rgba colour) :
+Frame::Frame(int x, int y, Imf::Rgba colour, int scale) :
 	x_res_(x),
 	y_res_(y),
+    scale_(scale),
     current_x_(0.0),
     current_y_(0.0)
 {
@@ -145,28 +146,46 @@ void Frame::DrawLine(double x0, double y0, double x1, double y1)
 
 void Frame::DrawTo(double x, double y)
 {
-    DrawLine(current_x_, current_y_, x, y);
+    double scaled_x, scaled_y;
+    scaled_x = (x * scale_) + x_res_ * 0.5;
+    scaled_y = (y * scale_) + y_res_ * 0.5;
+    
+    DrawLine(current_x_, current_y_, scaled_x, scaled_y);
 
-    current_x_ = x;
-    current_y_ = y;
+    current_x_ = scaled_x;
+    current_y_ = scaled_y;
+}
+
+void Frame::DrawTo(vec3 point)
+{
+    DrawTo(point.x, point.y);
 }
 
 void Frame::MoveTo(double x, double y)
 {
-    current_x_ = x;
-    current_y_ = y;
+    double scaled_x, scaled_y;
+    scaled_x = (x * scale_) + x_res_ * 0.5;
+    scaled_y = (y * scale_) + y_res_ * 0.5;
+    
+    current_x_ = scaled_x;
+    current_y_ = scaled_y;
+}
+
+void Frame::MoveTo(vec3 point)
+{
+    MoveTo(point.x, point.y);
 }
 
 void Frame::DrawObject(Object obj)
 {
     vec3 start_vert = obj.Vert(0, 0);
-    MoveTo((start_vert.x+2)*100, (start_vert.y+2)*100);
+    MoveTo(start_vert);
     for (int i = 0; i < obj.PolyCount(); i++) {
         for (int j = 0; j < obj.Polys()[i].vert_count; j++) {
             vec3 vert = obj.Vert(i, j);
-            DrawTo((vert.x+2)*100, (vert.y+2)*100);
+            DrawTo(vert);
         }
     }
 
-    DrawTo(start_vert.x, start_vert.y);
+    DrawTo(start_vert);
 }

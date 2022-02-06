@@ -9,7 +9,7 @@
 class Frame
 {
 public:
-	Frame(int x, int y, Imf::Rgba color);
+	Frame(int x, int y, Imf::Rgba color, int scale = 100);
 
 	bool WriteFrame(const char* filename = "out.exr");
 
@@ -20,6 +20,9 @@ public:
 
 	void DrawTo(double x, double y);
 	void MoveTo(double x, double y);
+
+	void DrawTo(vec3 point);
+	void MoveTo(vec3 point);
 
 	void DrawObject(Object obj);
 
@@ -38,6 +41,7 @@ private:
 
 	int x_res_;
 	int y_res_;
+	int scale_;
 
 	double current_x_;
 	double current_y_;
