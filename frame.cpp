@@ -1,8 +1,8 @@
-#include <OpenEXR/ImfInputFile.h>
-#include <OpenEXR/ImfChannelList.h>
-#include <OpenEXR/ImfFrameBuffer.h>
-#include <OpenEXR/ImfRgbaFile.h>
-#include <OpenEXR/half.h>
+//#include <OpenEXR/ImfInputFile.h>
+//#include <OpenEXR/ImfChannelList.h>
+//#include <OpenEXR/ImfFrameBuffer.h>
+//#include <OpenEXR/ImfRgbaFile.h>
+#include <Imath/half.h>
 
 #include"frame.h"
 

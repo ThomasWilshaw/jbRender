@@ -71,7 +71,7 @@ int main()
     frame.DrawObject(cube, C);
     */
 
-    Tokenizer t("program.jbr", &frame);
+    Tokenizer t("..\\..\\..\\program.jbr", &frame);
 
     if (frame.WriteFrame()) {
         std::cout << "Frame written" << std::endl;

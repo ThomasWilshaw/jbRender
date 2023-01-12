@@ -2,6 +2,7 @@
 #define MATHS_H
 
 #include <vector>
+#include <iostream>
 
 #define PI 3.14159265
 

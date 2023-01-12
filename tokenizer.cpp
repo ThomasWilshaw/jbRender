@@ -124,12 +124,12 @@ void Tokenizer::DrawObject(std::string obj)
 
 void Tokenizer::LoadObjects()
 {
-    Object pyramid("objects/square_based_pyramid.obj");
+    Object pyramid("..\\..\\..\\objects\\square_based_pyramid.obj");
     obj_list_.push_back(pyramid);
 
-    Object cube("objects/cube.obj");
+    Object cube("..\\..\\..\\objects\\cube.obj");
     obj_list_.push_back(cube);
 
-    Object ground("objects/ground.obj");
+    Object ground("..\\..\\..\\objects\\ground.obj");
     obj_list_.push_back(ground);
 }

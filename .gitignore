@@ -4,3 +4,5 @@ x86/
 *.sln
 *.vcxproj*
 *.exr
+out/
+CMakeSettings.json
