@@ -2,6 +2,7 @@
 #include <OpenEXR/ImfRgbaFile.h>
 
 #include "object.h"
+#include "Scene.h"
 
 #ifndef FRAME_H
 #define FRAME_H
@@ -24,8 +25,9 @@ public:
 	void DrawTo(vec3 point);
 	void MoveTo(vec3 point);
 
-	void DrawObject(Object obj, Matrix C);
-	vec3 PushVertThroughPipeline(vec3 vert, Matrix C);
+	void DrawObject(Object* obj, Matrix *C);
+	void DrawScene(Scene* scene);
+	vec3 PushVertThroughPipeline(vec3 vert, Matrix *C);
 
 private:
 	int int_part(const double x) { return (int)floor(x); };

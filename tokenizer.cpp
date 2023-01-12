@@ -10,8 +10,10 @@
 Tokenizer::Tokenizer(const std::string filename, Frame* frame):
     frame_(frame)
 {
-    C.SetIdentity();
+    C = new Matrix();
+    C->SetIdentity();
     LoadObjects();
+    scene_ = new Scene();
 
     Matrix T;
     T.SetIdentity();
@@ -29,6 +31,10 @@ Tokenizer::Tokenizer(const std::string filename, Frame* frame):
         std::istringstream iss(line.c_str());
         char trash[5];
 
+        if (!line.compare(0, 1, "#")) {
+            continue;
+        }
+
         if (!line.compare(0, 5, "PERS ")) {
             double theta, zn, zf = 0;
             char c;
@@ -40,7 +46,7 @@ Tokenizer::Tokenizer(const std::string filename, Frame* frame):
             iss >> zf >> c;
 
             T.SetPerspective(theta, zn, zf);
-            C.Multiply(T);
+            C->Multiply(T);
 
         } else if (!line.compare(0, 5, "TRAN ")) {
             double x, y, z = 0;
@@ -53,7 +59,7 @@ Tokenizer::Tokenizer(const std::string filename, Frame* frame):
             iss >> z >> c;
 
             T.SetTranslate(x, y, z);
-            C.Multiply(T);
+            C->Multiply(T);
 
         } else if (!line.compare(0, 4, "ROT ")) {
             double angle = 0;
@@ -72,7 +78,7 @@ Tokenizer::Tokenizer(const std::string filename, Frame* frame):
             } else if (axis == 3) {
                 T.SetRotation(angle, axis::kAxisZ);
             }
-            C.Multiply(T);
+            C->Multiply(T);
 
         } else if (!line.compare(0, 5, "SCAL ")){
             double x, y, z = 0;
@@ -85,24 +91,43 @@ Tokenizer::Tokenizer(const std::string filename, Frame* frame):
             iss >> z >> c;
 
             T.SetScale(x, y, z);
-            C.Multiply(T);
+            C->Multiply(T);
 
         } else if (!line.compare(0, 5, "DRAW ")){
-            std::string object;
+            std::string object_name;
 
             iss >> trash;
-            iss >> object;
+            iss >> object_name;
             
-            DrawObject(object);
+            //DrawObject(object_name);
+            scene_->AddObject(GetObjectFromName(object_name), C);
 
         } else if (!line.compare(0, 4, "PUSH")){
-            stack_.Push(C);
+            stack_.Push(*C);
 
-        } else if (!line.compare(0, 3, "POP")){
-            C = stack_.Pop();
+        }
+        else if (!line.compare(0, 3, "POP")) {
+            C->SetData(stack_.Pop().data());
+        }else if(!line.compare(0, 4, "PRMT")) {
+            C->PrintMatrix();
         } else {
             std::cout << "ERROR: Invalid syntax: " << line << std::endl;
         }
+    }
+
+    frame_->DrawScene(scene_);
+}
+
+Object* Tokenizer::GetObjectFromName(std::string obj)
+{
+    if (obj.compare(0, 6, "GPLANE") == 0) {
+        return obj_list_.at(2);
+    }
+    if (obj.compare(0, 4, "CUBE") == 0) {
+        return obj_list_.at(1);
+    }
+    if (obj.compare(0, 6, "PYRAMID") == 0) {
+        return obj_list_.at(0);
     }
 }
 
@@ -124,12 +149,12 @@ void Tokenizer::DrawObject(std::string obj)
 
 void Tokenizer::LoadObjects()
 {
-    Object pyramid("..\\..\\..\\objects\\square_based_pyramid.obj");
+    Object* pyramid = new Object("..\\..\\..\\objects\\square_based_pyramid.obj");
     obj_list_.push_back(pyramid);
 
-    Object cube("..\\..\\..\\objects\\cube.obj");
+    Object* cube = new Object("..\\..\\..\\objects\\cube.obj");
     obj_list_.push_back(cube);
 
-    Object ground("..\\..\\..\\objects\\ground.obj");
+    Object* ground = new Object("..\\..\\..\\objects\\ground.obj");
     obj_list_.push_back(ground);
 }

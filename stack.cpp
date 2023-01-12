@@ -4,6 +4,7 @@
 
 Stack::Stack()
 {
+	stack_.reserve(10);
 }
 
 void Stack::Push(Matrix m)

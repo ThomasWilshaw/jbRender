@@ -30,6 +30,40 @@ enum axis {
 	kAxisZ
 };
 
+class Edge
+{
+public:
+	Edge(vec4 a, vec4 b);
+
+	vec4 GetA();
+	vec4 GetB();
+
+	std::vector<vec3> GetEdgeDividedByW();
+
+private:
+	std::vector<vec4> vertices_;
+
+};
+
+class Polygon
+{
+public:
+	Polygon();
+
+	void AddEdge(Edge* edge);
+
+	std::vector<Edge*> GetEdges();
+
+	void AddVertex(vec4 vertex);
+	std::vector<vec4> GetScreenSpaceVertices() { return vertices_; };
+
+	bool Cull();
+
+private:
+	std::vector<Edge*> edges_;
+	std::vector<vec4> vertices_;
+};
+
 
 /*
 * Matricies are stored in a row major order 
@@ -70,18 +104,18 @@ private:
 
 // static functions
 
-static vec4 TransformVector(vec4 v, Matrix C) {
+static vec4 TransformVector(vec4 v, Matrix* C) {
 	struct vec4 output = {0, 0, 0, 1};
 
-	output.x = v.x * C.data()[0][0] + v.y * C.data()[1][0] + v.z * C.data()[2][0] + v.w * C.data()[3][0];
-	output.y = v.x * C.data()[0][1] + v.y * C.data()[1][1] + v.z * C.data()[2][1] + v.w * C.data()[3][1];
-	output.z = v.x * C.data()[0][2] + v.y * C.data()[1][2] + v.z * C.data()[2][2] + v.w * C.data()[3][2];
-	output.w = v.x * C.data()[0][3] + v.y * C.data()[1][3] + v.z * C.data()[2][3] + v.w * C.data()[3][3];
+	output.x = v.x * C->data()[0][0] + v.y * C->data()[1][0] + v.z * C->data()[2][0] + v.w * C->data()[3][0];
+	output.y = v.x * C->data()[0][1] + v.y * C->data()[1][1] + v.z * C->data()[2][1] + v.w * C->data()[3][1];
+	output.z = v.x * C->data()[0][2] + v.y * C->data()[1][2] + v.z * C->data()[2][2] + v.w * C->data()[3][2];
+	output.w = v.x * C->data()[0][3] + v.y * C->data()[1][3] + v.z * C->data()[2][3] + v.w * C->data()[3][3];
 
 	return output;
 }
 
-static vec4 TransformVector(vec3 v, Matrix C)
+static vec4 TransformVector(vec3 v, Matrix* C)
 {
 	vec4 v4;
 	v4.x = v.x;

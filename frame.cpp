@@ -182,14 +182,23 @@ void Frame::MoveTo(vec3 point)
     MoveTo(point.x, point.y);
 }
 
-void Frame::DrawObject(Object obj, Matrix C)
+void Frame::DrawScene(Scene* scene)
 {
-    for (int i = 0; i < obj.PolyCount(); i++) {
+    for each (Edge* edge in scene->GetEdges()) {
+        std::vector<vec3> edges_divided_by_w = edge->GetEdgeDividedByW();
+        MoveTo(edges_divided_by_w.at(0));
+        DrawTo(edges_divided_by_w.at(1));
+    }
+}
+
+void Frame::DrawObject(Object* obj, Matrix *C)
+{
+    for (int i = 0; i < obj->PolyCount(); i++) {
         // Move to first vertex
-        vec3 first_vert_transformed = PushVertThroughPipeline(obj.Vert(i, 0), C);
+        vec3 first_vert_transformed = PushVertThroughPipeline(obj->Vert(i, 0), C);
         MoveTo(first_vert_transformed);
-        for (int j = 1; j < obj.Polys()[i].vert_count; j++) {
-            vec3 vert = obj.Vert(i, j);
+        for (int j = 1; j < obj->Polys()[i].vert_count; j++) {
+            vec3 vert = obj->Vert(i, j);
             DrawTo(PushVertThroughPipeline(vert, C));
         }
         // Draw line from last vertex back to first
@@ -197,7 +206,7 @@ void Frame::DrawObject(Object obj, Matrix C)
     }
 }
 
-vec3 Frame::PushVertThroughPipeline(vec3 vert, Matrix C)
+vec3 Frame::PushVertThroughPipeline(vec3 vert, Matrix *C)
 {
     vec4 trans_vert = TransformVector(vert, C);
     return DivideByW(trans_vert);

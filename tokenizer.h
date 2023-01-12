@@ -7,6 +7,7 @@
 #include "frame.h"
 #include"object.h"
 #include "stack.h"
+#include "Scene.h"
 
 class Tokenizer
 {
@@ -16,12 +17,14 @@ public:
 private:
 	void LoadObjects();
 	void DrawObject(std::string obj);
+	Object* GetObjectFromName(std::string obj);
 
-	std::vector<Object> obj_list_;
+	std::vector<Object*> obj_list_;
 
 	Frame* frame_;
-	Matrix C;
+	Matrix* C;
 	Stack stack_;
+	Scene *scene_;
 };
 
 #endif

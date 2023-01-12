@@ -5,26 +5,24 @@
 #include "maths.h"
 #include "object.h"
 
-struct Edge {
-	vec3 p1;
-	vec3 p2;
-};
-
-struct Poly {
-	std::vector<Edge> edges;
-};
 
 class Scene
 {
 public:
 	Scene();
 
-	void AddObject(Object* object);
+	void AddObject(Object* object, Matrix* C);
+
+	std::vector<Edge*> GetEdges() { return scene_edges_; };
+	std::vector<Polygon*> GetPolygons() { return scene_polys_; };
+	std::vector<Edge*> GetDividedEdges() { return divided_by_w_edges_; };
 
 
 private:
-	std::vector<Edge> scene_edges_;
-	std::vector<Poly> scene_polys_;
+	std::vector<Edge*> scene_edges_;
+	std::vector<Polygon*> scene_polys_;
+
+	std::vector<Edge*> divided_by_w_edges_;
 
 };
 
