@@ -7,13 +7,12 @@
 #include "maths.h"
 #include "object.h"
 
-Tokenizer::Tokenizer(const std::string filename, Frame* frame):
-    frame_(frame)
+Tokenizer::Tokenizer(const std::string filename, Scene* scene):
+    scene_(scene)
 {
     C = new Matrix();
     C->SetIdentity();
     LoadObjects();
-    scene_ = new Scene();
 
     Matrix T;
     T.SetIdentity();
@@ -98,8 +97,7 @@ Tokenizer::Tokenizer(const std::string filename, Frame* frame):
 
             iss >> trash;
             iss >> object_name;
-            
-            //DrawObject(object_name);
+
             scene_->AddObject(GetObjectFromName(object_name), C);
 
         } else if (!line.compare(0, 4, "PUSH")){
@@ -115,7 +113,7 @@ Tokenizer::Tokenizer(const std::string filename, Frame* frame):
         }
     }
 
-    frame_->DrawScene(scene_);
+   // frame_->DrawScene(scene_);
 }
 
 Object* Tokenizer::GetObjectFromName(std::string obj)
@@ -128,22 +126,6 @@ Object* Tokenizer::GetObjectFromName(std::string obj)
     }
     if (obj.compare(0, 6, "PYRAMID") == 0) {
         return obj_list_.at(0);
-    }
-}
-
-void Tokenizer::DrawObject(std::string obj)
-{
-    if (obj.compare(0, 6, "GPLANE") == 0) {
-        frame_->DrawObject(obj_list_.at(2), C);
-        return;
-    }
-    if (obj.compare(0, 4, "CUBE") == 0) {
-        frame_->DrawObject(obj_list_.at(1), C);
-        return;
-    }
-    if (obj.compare(0, 6, "PYRAMID") == 0) {
-        frame_->DrawObject(obj_list_.at(0), C);
-        return;
     }
 }
 

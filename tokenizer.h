@@ -13,16 +13,15 @@
 class Tokenizer
 {
 public:
-	Tokenizer(const std::string filename, Frame* frame);
+	Tokenizer(const std::string filename, Scene* scene);
 
 private:
 	void LoadObjects();
-	void DrawObject(std::string obj);
 	Object* GetObjectFromName(std::string obj);
 
 	std::vector<Object*> obj_list_;
 
-	Frame* frame_;
+	//Frame* frame_;
 	Matrix* C;
 	Stack stack_;
 	Scene *scene_;

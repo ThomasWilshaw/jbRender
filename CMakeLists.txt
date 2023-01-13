@@ -7,7 +7,7 @@ find_package(OpenEXR CONFIG)
 
 include_directories(${PROJECT_SOURCE_DIR})
 
-add_executable(jbRender jbRender.cpp frame.cpp maths.cpp object.cpp Scene.cpp stack.cpp tokenizer.cpp)
+add_executable(jbRender jbRender.cpp frame.cpp maths.cpp object.cpp Scene.cpp stack.cpp tokenizer.cpp renderer.cpp)
 
 target_link_libraries (jbRender
     PUBLIC
