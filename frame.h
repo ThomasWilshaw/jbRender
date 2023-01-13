@@ -7,6 +7,7 @@
 #ifndef FRAME_H
 #define FRAME_H
 
+// THe actual rendered frame. Hanldes all drawing and saving
 class Frame
 {
 public:

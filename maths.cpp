@@ -58,7 +58,7 @@ void Polygon::AddVertex(vec4 vertex)
 	vertices_.push_back(vertex);
 }
 
-//screen space back face cull test
+// Screen space back face cull test
 bool Polygon::Cull()
 {
 	double sum = 0;

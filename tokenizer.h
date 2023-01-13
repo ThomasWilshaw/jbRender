@@ -9,6 +9,7 @@
 #include "stack.h"
 #include "Scene.h"
 
+// Reads the .jb file and builds the scene
 class Tokenizer
 {
 public:

@@ -5,7 +5,7 @@
 #include "maths.h"
 #include "object.h"
 
-
+// Stores all the actual polygons in their transformed state.
 class Scene
 {
 public:

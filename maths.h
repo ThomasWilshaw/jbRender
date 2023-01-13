@@ -6,12 +6,14 @@
 
 #define PI 3.14159265
 
+// Vector of length 3
 struct vec3 {
 	double x;
 	double y;
 	double z;
 };
 
+// Vector of length 4
 struct vec4 {
 	double x;
 	double y;
@@ -19,17 +21,20 @@ struct vec4 {
 	double w;
 };
 
+//Ver simple polygon structure used by Object class to store raw polygon data
 struct poly {
 	std::vector<int> verts;
 	int vert_count;
 };
 
+// Axis enum for rotation matrix
 enum axis {
 	kAxisX,
 	kAxisY,
 	kAxisZ
 };
 
+// Stores an edge as two vec4
 class Edge
 {
 public:
@@ -45,6 +50,7 @@ private:
 
 };
 
+// Stores a polygon as a list of edges and vertices
 class Polygon
 {
 public:
@@ -74,8 +80,13 @@ class Matrix
 public:
 	Matrix();
 
+	// Sets matrix to identitiy
 	void SetIdentity();
+
+	// Allows you to manually set the data of a matrix
 	void SetData(std::vector< std::vector<double> >);
+
+	// Functions for creating transform matricies
 
 	void SetPerspective(double alpha, double zn, double zf);
 	void SetTranslate(double x, double y, double z);
@@ -84,10 +95,11 @@ public:
 
 	void PrintMatrix() const;
 
+	// Acces the matricies raw data
 	std::vector< std::vector<double> > data();
 
 	/*
-	* Mupltiply htis matrix by T
+	* Mupltiply this matrix by T
 	* m = TC
 	*/
 	void Multiply(Matrix T);
@@ -103,7 +115,7 @@ private:
 
 
 // static functions
-
+// Multiply a vec4 by a 4x4 matrix
 static vec4 TransformVector(vec4 v, Matrix* C) {
 	struct vec4 output = {0, 0, 0, 1};
 
@@ -115,6 +127,7 @@ static vec4 TransformVector(vec4 v, Matrix* C) {
 	return output;
 }
 
+// Multiply a vec3 by a 4x4 matrix (setw w to 1.0)
 static vec4 TransformVector(vec3 v, Matrix* C)
 {
 	vec4 v4;
@@ -126,6 +139,7 @@ static vec4 TransformVector(vec3 v, Matrix* C)
 	return TransformVector(v4, C);
 }
 
+// Divide a vec4 by w. REturns a vec3
 static vec3 DivideByW(vec4 v)
 {
 	vec3 output;

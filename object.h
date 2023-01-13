@@ -6,6 +6,7 @@
 
 #include "maths.h"
 
+// Basic data stored about an object loaded from file
 class Object
 {
 public:
