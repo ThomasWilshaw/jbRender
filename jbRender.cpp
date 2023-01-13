@@ -36,6 +36,4 @@ int main()
     else {
         std::cout << "Error";
     }
-
-    
 }

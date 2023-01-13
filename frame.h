@@ -26,8 +26,6 @@ public:
 	void DrawTo(vec3 point);
 	void MoveTo(vec3 point);
 
-	void DrawObject(Object* obj, Matrix *C);
-	void DrawScene(Scene* scene);
 	vec3 PushVertThroughPipeline(vec3 vert, Matrix *C);
 
 private:

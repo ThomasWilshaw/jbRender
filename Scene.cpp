@@ -38,9 +38,8 @@ void Scene::AddObject(Object* object, Matrix *C)
 		polygon->AddEdge(final_edge);
 		temp_edge_list.push_back(final_edge);
 
-		if (!polygon->Cull()) {
-			scene_edges_.insert(scene_edges_.end(), temp_edge_list.begin(), temp_edge_list.end());
-			scene_polys_.push_back(polygon);
-		}
+		polygon->CullTest();
+		//scene_edges_.insert(scene_edges_.end(), temp_edge_list.begin(), temp_edge_list.end());
+		scene_polys_.push_back(polygon);
 	}
 }

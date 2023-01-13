@@ -45,8 +45,13 @@ public:
 
 	std::vector<vec3> GetEdgeDividedByW();
 
+	std::vector<vec4>* GetHashKey() { return hash_key_; };
+
+	bool Compare(const Edge* e) const;
+
 private:
 	std::vector<vec4> vertices_;
+	std::vector<vec4>* hash_key_;
 
 };
 
@@ -63,11 +68,14 @@ public:
 	void AddVertex(vec4 vertex);
 	std::vector<vec4> GetScreenSpaceVertices() { return vertices_; };
 
-	bool Cull();
+	bool CullTest();
+	bool GetCull() { return cull_; };
 
 private:
 	std::vector<Edge*> edges_;
 	std::vector<vec4> vertices_;
+
+	bool cull_;
 };
 
 
@@ -155,6 +163,14 @@ static vec3 DivideByW(vec4 v)
 	}
 
 	return output;
+}
+
+static double magnitude(vec4 v)
+{
+	double sum;
+	sum = v.x * v.x + v.y * v.y + v.z * v.z + v.w * v.w;
+
+	return sqrt(sum);
 }
 
 #endif

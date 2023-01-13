@@ -6,6 +6,49 @@ Edge::Edge(vec4 a, vec4 b)
 {
 	vertices_.push_back(a);
 	vertices_.push_back(b);
+
+	double size_a = magnitude(a);
+	double size_b = magnitude(b);
+
+	hash_key_ = new std::vector<vec4>();
+
+	size_a < size_b ? hash_key_->push_back(a) : hash_key_->push_back(b);
+	size_b > size_a ? hash_key_->push_back(b) : hash_key_->push_back(a);
+}
+
+bool Edge::Compare(const Edge* e) const
+{
+	if (hash_key_->size() != 2) {
+		return false;
+	}
+
+	if (hash_key_->at(0).x != e->hash_key_->at(0).x) {
+		return false;
+	}
+	if (hash_key_->at(0).y != e->hash_key_->at(0).y) {
+		return false;
+	}
+	if (hash_key_->at(0).z != e->hash_key_->at(0).z) {
+		return false;
+    }
+	if (hash_key_->at(0).w != e->hash_key_->at(0).w) {
+		return false;
+	}
+
+	if (hash_key_->at(1).x != e->hash_key_->at(1).x) {
+		return false;
+	}
+	if (hash_key_->at(1).y != e->hash_key_->at(1).y) {
+		return false;
+	}
+	if (hash_key_->at(1).z != e->hash_key_->at(1).z) {
+		return false;
+	}
+	if (hash_key_->at(1).w != e->hash_key_->at(1).w) {
+		return false;
+	}
+
+	return true;
 }
 
 vec4 Edge::GetA()
@@ -39,7 +82,8 @@ std::vector <vec3> Edge::GetEdgeDividedByW()
 	return new_edge;
 }
 
-Polygon::Polygon()
+Polygon::Polygon():
+	cull_(false)
 {
 }
 
@@ -59,7 +103,7 @@ void Polygon::AddVertex(vec4 vertex)
 }
 
 // Screen space back face cull test
-bool Polygon::Cull()
+bool Polygon::CullTest()
 {
 	double sum = 0;
 	vec3 n;
@@ -78,9 +122,11 @@ bool Polygon::Cull()
 	}
 
 	if (sum > 0) {
+		cull_ = true;
 		return true;
 	}
 	else {
+		cull_ = false;
 		return false;
 	}
 }
