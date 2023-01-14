@@ -66,10 +66,12 @@ public:
 	std::vector<Edge*> GetEdges();
 
 	void AddVertex(vec4 vertex);
-	std::vector<vec4> GetScreenSpaceVertices() { return vertices_; };
+	std::vector<vec4> GetVertices() { return vertices_; };
 
 	bool CullTest();
 	bool GetCull() { return cull_; };
+
+	vec3 GetScreenNormal();
 
 private:
 	std::vector<Edge*> edges_;
@@ -171,6 +173,27 @@ static double magnitude(vec4 v)
 	sum = v.x * v.x + v.y * v.y + v.z * v.z + v.w * v.w;
 
 	return sqrt(sum);
+}
+
+static vec3 Vec3Subtract(vec3 a, vec3 b)
+{
+	vec3 result;
+	result.x = a.x - b.x;
+	result.y = a.y - b.y;
+	result.z = a.z - b.z;
+
+	return result;
+}
+
+static vec3 Vec3Cross(vec3 a, vec3 b)
+{
+	vec3 result = { 0.0, 0.0, 0.0};
+
+	result.x = a.y * b.z - a.z * b.y;
+	result.y = a.z * b.x - a.x * b.z;
+	result.z = a.x * b.y - a.y * b.x;
+
+	return result;
 }
 
 #endif

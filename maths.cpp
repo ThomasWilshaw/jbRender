@@ -131,6 +131,18 @@ bool Polygon::CullTest()
 	}
 }
 
+vec3 Polygon::GetScreenNormal()
+{
+	vec3 p1 = DivideByW(vertices_.at(0));
+	vec3 p2 = DivideByW(vertices_.at(1));
+	vec3 p3 = DivideByW(vertices_.at(2));
+
+	vec3 u = Vec3Subtract(p2, p1);
+	vec3 v = Vec3Subtract(p3, p1);
+
+	return Vec3Cross(u, v);
+}
+
 Matrix::Matrix()
 {
     data_ = std::vector<std::vector<double>>(4, std::vector<double>(4, 0));

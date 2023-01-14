@@ -14,6 +14,8 @@ public:
     bool Render();
 
 private:
+    bool FaceVertexCompare(Polygon* poly, vec4 vertex);
+
     Scene* scene_;
     Frame* frame_;
 
