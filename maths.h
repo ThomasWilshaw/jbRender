@@ -49,9 +49,13 @@ public:
 
 	bool Compare(const Edge* e) const;
 
+	void SetBoundary(bool boundary) { boundary_ = boundary; };
+	bool GetBoundary() { return boundary_; };
+
 private:
 	std::vector<vec4> vertices_;
 	std::vector<vec4>* hash_key_;
+	bool boundary_;
 
 };
 
@@ -72,6 +76,8 @@ public:
 	bool GetCull() { return cull_; };
 
 	vec3 GetScreenNormal();
+
+	bool ContainsEdge(Edge* edge);
 
 private:
 	std::vector<Edge*> edges_;

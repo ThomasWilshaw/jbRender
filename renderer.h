@@ -15,6 +15,7 @@ public:
 
 private:
     bool FaceVertexCompare(Polygon* poly, vec4 vertex);
+    double EdgeEdgeCompare(Edge* a, Edge* b);
 
     Scene* scene_;
     Frame* frame_;

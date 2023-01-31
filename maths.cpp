@@ -2,7 +2,8 @@
 
 #include "maths.h"
 
-Edge::Edge(vec4 a, vec4 b)
+Edge::Edge(vec4 a, vec4 b):
+	boundary_(true)
 {
 	vertices_.push_back(a);
 	vertices_.push_back(b);
@@ -76,6 +77,7 @@ std::vector <vec3> Edge::GetEdgeDividedByW()
 	b.x = vertices_.at(1).x / vertices_.at(1).w;
 	b.y = vertices_.at(1).y / vertices_.at(1).w;
 	b.z = vertices_.at(1).z / vertices_.at(1).w;
+	//std::cout << a.x << ", " << b.x << std::endl;
 
 	new_edge.push_back(b);
 
@@ -141,6 +143,15 @@ vec3 Polygon::GetScreenNormal()
 	vec3 v = Vec3Subtract(p3, p1);
 
 	return Vec3Cross(u, v);
+}
+
+bool Polygon::ContainsEdge(Edge* edge)
+{
+	for each (Edge * test_edge in edges_) {
+		if (edge->Compare(test_edge)) {
+			return true;
+		}
+	}
 }
 
 Matrix::Matrix()

@@ -118,13 +118,16 @@ Tokenizer::Tokenizer(const std::string filename, Scene* scene):
 
 Object* Tokenizer::GetObjectFromName(std::string obj)
 {
+    if (obj.compare(0, 6, "SQUARE") == 0) {
+        return obj_list_.at(3);
+    }
     if (obj.compare(0, 6, "GPLANE") == 0) {
         return obj_list_.at(2);
     }
     if (obj.compare(0, 4, "CUBE") == 0) {
         return obj_list_.at(1);
     }
-    if (obj.compare(0, 6, "PYRAMID") == 0) {
+    if (obj.compare(0, 7, "PYRAMID") == 0) {
         return obj_list_.at(0);
     }
 }
@@ -139,4 +142,7 @@ void Tokenizer::LoadObjects()
 
     Object* ground = new Object("..\\..\\..\\objects\\ground.obj");
     obj_list_.push_back(ground);
+
+    Object* square = new Object("..\\..\\..\\objects\\square.obj");
+    obj_list_.push_back(square);
 }
