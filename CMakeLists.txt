@@ -15,3 +15,6 @@ target_link_libraries (jbRender
         Imath::Imath
         #Imath::Half
     )
+
+enable_testing()
+add_subdirectory(tests)

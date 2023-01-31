@@ -260,23 +260,3 @@ bool Renderer::FaceVertexCompare(Polygon* poly, vec4 vertex)
 	}
 	return false;
 }
-
-double Renderer::EdgeEdgeCompare(Edge* a, Edge* b)
-{
-	std::vector<vec3> a_screen = a->GetEdgeDividedByW();
-	std::vector<vec3> b_screen = b->GetEdgeDividedByW();
-
-	vec3 p = a_screen.at(0);
-	vec3 q = a_screen.at(1);
-
-	vec3 r = b_screen.at(0);
-	vec3 s = b_screen.at(1);
-
-	double d_1 = (s.x - r.x) * (p.y - r.y) - (p.x - r.x) * (s.y - r.y);
-	double d_2 = (s.x - r.x) * (q.y - r.y) - (q.x - r.x) * (s.y - r.y);
-	double d_3 = (p.x - r.x) * (q.y - r.y) * (q.x - r.x) * (p.y - r.y);
-	double d_4 = d_1 - d_2 + d_3;
-
-	double alpha = d_1 / (d_1 - d_2);
-	double beta = d_3 / (d_3 - d_4);
-}
