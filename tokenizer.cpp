@@ -69,7 +69,7 @@ Tokenizer::Tokenizer(const std::string filename, Scene* scene):
 
             iss >> angle >> c;
             iss >> axis >> c;
-            std::cout << angle << " " << axis << std::endl;
+            //std::cout << angle << " " << axis << std::endl;
             if (axis == 1) {
                 T.SetRotation(angle, axis::kAxisX);
             } else if (axis == 2){

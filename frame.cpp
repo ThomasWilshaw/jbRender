@@ -6,13 +6,12 @@
 
 #include"frame.h"
 
-Frame::Frame(int x, int y, Imf::Rgba colour, const char* filename, int scale) :
+Frame::Frame(int x, int y, Imf::Rgba colour, int scale) :
 	x_res_(x),
 	y_res_(y),
     scale_(scale),
     current_x_(0.0),
-    current_y_(0.0),
-    filename_(filename)
+    current_y_(0.0)
 {
     rgba_data_ = new Imf::Rgba[x_res_ * y_res_];
     for (int i = 0; i < x_res_ * y_res_; i++) {
@@ -38,17 +37,12 @@ bool Frame::WriteFrame(const char* filename)
     }
 }
 
-bool Frame::WriteFrame()
-{
-    return WriteFrame(filename_);
-}
-
 void Frame::SetPixel(int x, int y, Imf::Rgba color)
 {
     if (0 <= x && x < x_res_ && 0 <= y && y < y_res_) {
         //rgba_data_[y * x_res_ + x] = color;
 
-        int flip_y = y_res_ - y;
+        int flip_y = y_res_ - 1- y;
 
         // We're working in B&W so multiply the colour to make sure lines
         // get darker as the cross

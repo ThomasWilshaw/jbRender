@@ -77,7 +77,6 @@ std::vector <vec3> Edge::GetEdgeDividedByW()
 	b.x = vertices_.at(1).x / vertices_.at(1).w;
 	b.y = vertices_.at(1).y / vertices_.at(1).w;
 	b.z = vertices_.at(1).z / vertices_.at(1).w;
-	//std::cout << a.x << ", " << b.x << std::endl;
 
 	new_edge.push_back(b);
 

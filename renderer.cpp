@@ -73,7 +73,7 @@ bool Renderer::Render()
 			}
 		}
 
-		std::cout << "QI: " << QI << std::endl;
+		//std::cout << "QI: " << QI << std::endl;
 
 		// Find intersections
 		//std::vector<Intersection> intersection_list;
@@ -107,7 +107,7 @@ bool Renderer::Render()
 			double d_3 = (p.x - r.x) * (q.y - r.y) - (q.x - r.x) * (p.y - r.y);
 			double d_4 = d_1 - d_2 + d_3;
 
-			std::cout << "d_1: " << d_1 << " d_2: " << d_2 << " d_3: " << d_3 << " d_4: " << d_4 << std::endl;
+			//std::cout << "d_1: " << d_1 << " d_2: " << d_2 << " d_3: " << d_3 << " d_4: " << d_4 << std::endl;
 
 			if (signbit(d_3 * d_4) == 0) {
 				continue;
@@ -121,11 +121,11 @@ bool Renderer::Render()
 				continue;
 			}
 			//std::cout.precision(17);
-			std::cout << "alpha: " << alpha << " beta: " << beta << std::endl;
+			//std::cout << "alpha: " << alpha << " beta: " << beta << std::endl;
 			double z_i = p.z + alpha * (q.z - p.z);
 			double z_j = s.z + beta * (r.z - s.z);
 
-			std::cout << "z_i: " << z_i << " z_j:" << z_j << std::endl;
+			//std::cout << "z_i: " << z_i << " z_j:" << z_j << std::endl;
 
 			if (z_i < z_j) {
 				continue;
@@ -141,14 +141,14 @@ bool Renderer::Render()
 
 			//std::cout << "z_i: " << z_i << " z_j:" << z_j << std::endl;
 			int deltaIQ = d_1 > 0 ? 1 : -1;
-			std::cout << "d_1: " << d_1 << " d_2: " << d_2 << " d_3: " << d_3 << " d_4: " << d_4 << std::endl;
+			//std::cout << "d_1: " << d_1 << " d_2: " << d_2 << " d_3: " << d_3 << " d_4: " << d_4 << std::endl;
 			intersection_list.emplace(alpha, deltaIQ);
 		}
-		std::cout << "Intersections: " << intersection_list.size() << std::endl;
+		//std::cout << "Intersections: " << intersection_list.size() << std::endl;
 		if (intersection_list.size() > 0) {
 			for (auto it = intersection_list.begin(); it != intersection_list.end(); ++it)
 			{
-				std::cout << it->first << '\t' << it->second << std::endl;
+				//std::cout << it->first << '\t' << it->second << std::endl;
 			}
 		}
 		
@@ -160,8 +160,6 @@ bool Renderer::Render()
 				continue;
 			}
 			frame_->MoveTo(edge_divided_by_w.at(0));
-			//std::cout << edge_divided_by_w.at(0).x << " " << edge_divided_by_w.at(0).y << " " << edge_divided_by_w.at(0).z << std::endl;
-			//std::cout << edge_divided_by_w.at(1).x << " " << edge_divided_by_w.at(1).y << " " << edge_divided_by_w.at(1).y << std::endl;
 			frame_->DrawTo(edge_divided_by_w.at(1));
 		}
 		else {
@@ -177,8 +175,6 @@ bool Renderer::Render()
 				new_point.x = edge_divided_by_w.at(0).x + it->first * (edge_divided_by_w.at(1).x - edge_divided_by_w.at(0).x);
 				new_point.y = edge_divided_by_w.at(0).y + it->first * (edge_divided_by_w.at(1).y - edge_divided_by_w.at(0).y);
 				new_point.z = 0.0;
-
-				//std::cout << new_point.x << ", " << new_point.y << ", " << new_point.z << std::endl;
 
 				if (QI == 1 && it->second == -1) {
 					frame_->MoveTo(new_point);
@@ -202,7 +198,6 @@ bool Renderer::Render()
 				frame_->DrawTo(edge_divided_by_w.at(1));
 			}
 		}
-		std::cout << std::endl;
 		
 	}
 	
@@ -232,7 +227,6 @@ bool Renderer::FaceVertexCompare(Polygon* poly, vec4 vertex)
 		}
 
 		flag = !flag;
-		//std::cout << d_i << ", " << d_i_1 << ", " << d_inf << ", " << d << std::endl;
 	}
 
 	// If we cross an edge an odd number of times flag is true and we are inside a polygon
@@ -267,7 +261,6 @@ bool Renderer::FaceVertexCompare(Polygon* poly, vec4 vertex)
 		}
 
 		if (z < v.z) {
-			//std::cout << "z: " << z << " v.z: " << v.z << std::endl;
 			return true;
 		}
 	}
