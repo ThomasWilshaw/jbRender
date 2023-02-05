@@ -42,11 +42,13 @@ void Frame::SetPixel(int x, int y, Imf::Rgba color)
     if (0 <= x && x < x_res_ && 0 <= y && y < y_res_) {
         //rgba_data_[y * x_res_ + x] = color;
 
+        int flip_y = y_res_ - y;
+
         // We're working in B&W so multiply the colour to make sure lines
         // get darker as the cross
-        rgba_data_[y * x_res_ + x].r *= color.r;
-        rgba_data_[y * x_res_ + x].g *= color.g;
-        rgba_data_[y * x_res_ + x].b *= color.b;
+        rgba_data_[flip_y * x_res_ + x].r *= color.r;
+        rgba_data_[flip_y * x_res_ + x].g *= color.g;
+        rgba_data_[flip_y * x_res_ + x].b *= color.b;
     }
     else {
         //std::cout << "Pixel " << x << "," << y << " is outside frame size." << std::endl;

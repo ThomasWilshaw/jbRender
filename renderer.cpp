@@ -122,13 +122,13 @@ bool Renderer::Render()
 			}
 			//std::cout.precision(17);
 			std::cout << "alpha: " << alpha << " beta: " << beta << std::endl;
-			double z_i = pz + alpha * (qz - pz);
-			double z_j = sz + beta * (rz - sz);
+			double z_i = p.z + alpha * (q.z - p.z);
+			double z_j = s.z + beta * (r.z - s.z);
 
 			std::cout << "z_i: " << z_i << " z_j:" << z_j << std::endl;
 
 			if (z_i < z_j) {
-				//continue;
+				continue;
 				std::cout << "z_i less than z_j"<< std::endl;
 			}
 
