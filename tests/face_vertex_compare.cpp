@@ -55,6 +55,9 @@ int main(int argc, char** argv)
 
 	std::cout << "Poly Normal: " << poly->GetScreenNormal().x << "," << poly->GetScreenNormal().y << "," << poly->GetScreenNormal().z << std::endl;
 
+	vec4 infront_but_close = {0.999, 0.998, -0.1, 1.0};
+	std::cout << "Point infront of plane and close to vertex returns (0): " << renderer.FaceVertexCompare(poly, infront_but_close) << std::endl;
+
 
 
 

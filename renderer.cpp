@@ -129,7 +129,6 @@ bool Renderer::Render()
 
 			if (z_i < z_j) {
 				continue;
-				std::cout << "z_i less than z_j"<< std::endl;
 			}
 
 			if (alpha == 1.0) {
@@ -157,7 +156,7 @@ bool Renderer::Render()
 		std::vector<vec3> edge_divided_by_w = edge->GetEdgeDividedByW();
 
 		if (0) {
-			if (intersection_list.size() == 0) {
+			if (QI == 0) {
 				continue;
 			}
 			frame_->MoveTo(edge_divided_by_w.at(0));
@@ -183,17 +182,18 @@ bool Renderer::Render()
 
 				if (QI == 1 && it->second == -1) {
 					frame_->MoveTo(new_point);
-					QI += it->second;
-					continue;
+					//QI += it->second;
+					//continue;
 				}
 				else if (QI == 0 && it->second == 1) {
 					frame_->DrawTo(new_point);
-					QI += it->second;
-					continue;
+					//QI += it->second;
+					//continue;
 				}
-				else {
-					QI += it->second;
-					continue;
+
+				QI += it->second;
+				if (QI < 0) {
+					std::cout << "---ERROR--- QI < 0" << std::endl;
 				}
 
 			}
