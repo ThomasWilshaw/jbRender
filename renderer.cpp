@@ -86,17 +86,22 @@ bool Renderer::Render()
 			std::vector<vec3> a_screen = edge->GetEdgeDividedByW();
 			std::vector<vec3> b_screen = boundary_edge->GetEdgeDividedByW();
 
+			double pz = edge->GetA().z;
+			double qz = edge->GetB().z;
+			double rz = boundary_edge->GetA().z;
+			double sz = boundary_edge->GetB().z;
+
 			vec3 p = a_screen.at(0);
 			vec3 q = a_screen.at(1);
 
-			vec3 r = b_screen.at(0);
-			vec3 s = b_screen.at(1);
+			vec3 r = b_screen.at(1);
+			vec3 s = b_screen.at(0);
 
 			double d_1 = (s.x - r.x) * (p.y - r.y) - (p.x - r.x) * (s.y - r.y);
 			double d_2 = (s.x - r.x) * (q.y - r.y) - (q.x - r.x) * (s.y - r.y);
 
 			if (signbit(d_1 * d_2) == 0) {
-				//continue;
+				continue;
 			}
 
 			double d_3 = (p.x - r.x) * (q.y - r.y) - (q.x - r.x) * (p.y - r.y);
@@ -116,25 +121,28 @@ bool Renderer::Render()
 				continue;
 			}
 			//std::cout.precision(17);
-			//std::cout << "alpha: " << alpha << " beta: " << beta << std::endl;
-			double z_i = p.z + alpha * (q.z - p.z);
-			double z_j = r.z + beta * (s.z - r.z);
+			std::cout << "alpha: " << alpha << " beta: " << beta << std::endl;
+			double z_i = pz + alpha * (qz - pz);
+			double z_j = sz + beta * (rz - sz);
+
+			std::cout << "z_i: " << z_i << " z_j:" << z_j << std::endl;
 
 			if (z_i < z_j) {
-				continue;
+				//continue;
+				std::cout << "z_i less than z_j"<< std::endl;
 			}
 
 			if (alpha == 1.0) {
 				//continue;
 			}
 
-			if (abs(z_i - z_j) < 0.000001) {
+			if (abs(z_i - z_j) < 0.00001) {
 				continue;
 			}
 
 			//std::cout << "z_i: " << z_i << " z_j:" << z_j << std::endl;
-			int deltaIQ = d_1 < 0 ? 1 : -1;
-
+			int deltaIQ = d_1 > 0 ? 1 : -1;
+			std::cout << "d_1: " << d_1 << " d_2: " << d_2 << " d_3: " << d_3 << " d_4: " << d_4 << std::endl;
 			intersection_list.emplace(alpha, deltaIQ);
 		}
 		std::cout << "Intersections: " << intersection_list.size() << std::endl;
@@ -148,8 +156,8 @@ bool Renderer::Render()
 		// Draw Edge
 		std::vector<vec3> edge_divided_by_w = edge->GetEdgeDividedByW();
 
-		if (1) {
-			if (QI == 0) {
+		if (0) {
+			if (intersection_list.size() == 0) {
 				continue;
 			}
 			frame_->MoveTo(edge_divided_by_w.at(0));
@@ -259,7 +267,7 @@ bool Renderer::FaceVertexCompare(Polygon* poly, vec4 vertex)
 		}
 
 		if (z < v.z) {
-			std::cout << "z: " << z << " v.z: " << v.z << std::endl;
+			//std::cout << "z: " << z << " v.z: " << v.z << std::endl;
 			return true;
 		}
 	}
