@@ -142,7 +142,12 @@ vec3 Polygon::GetScreenNormal()
 	vec3 u = Vec3Subtract(p2, p1);
 	vec3 v = Vec3Subtract(p3, p1);
 
-	return Vec3Cross(u, v);
+	vec3 cross = Vec3Cross(u, v);
+	double mag = magnitude(cross);
+
+	vec3 result = {cross.x/mag, cross.y/mag, cross.z/mag};
+
+	return result;
 }
 
 bool Polygon::ContainsEdge(Edge* edge)
@@ -152,6 +157,8 @@ bool Polygon::ContainsEdge(Edge* edge)
 			return true;
 		}
 	}
+
+	return false;
 }
 
 Matrix::Matrix()

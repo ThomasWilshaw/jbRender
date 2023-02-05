@@ -181,6 +181,12 @@ static double magnitude(vec4 v)
 	return sqrt(sum);
 }
 
+static double magnitude(vec3 v)
+{
+	vec4 temp = { v.x, v.y, v.z, 0.0 };
+	return magnitude(temp);;
+}
+
 static vec3 Vec3Subtract(vec3 a, vec3 b)
 {
 	vec3 result;
@@ -191,6 +197,11 @@ static vec3 Vec3Subtract(vec3 a, vec3 b)
 	return result;
 }
 
+static void Vec3Print(vec3 v)
+{
+	std::cout << v.x << " " << v.y << " " << v.z << std::endl;
+}
+
 static vec3 Vec3Cross(vec3 a, vec3 b)
 {
 	vec3 result = { 0.0, 0.0, 0.0};
@@ -199,7 +210,10 @@ static vec3 Vec3Cross(vec3 a, vec3 b)
 	result.y = a.z * b.x - a.x * b.z;
 	result.z = a.x * b.y - a.y * b.x;
 
+	//Vec3Print(result);
 	return result;
 }
+
+
 
 #endif

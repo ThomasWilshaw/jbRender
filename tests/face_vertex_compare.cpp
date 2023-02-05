@@ -35,9 +35,28 @@ int main(int argc, char** argv)
 
 	std::cout << "Cull test: " << poly->GetCull() << std::endl;
 
-	vec4 infront_of_plane = { 0.0, 0.0, 0.1, 1.0 };
+	vec4 outside = {2.0, 2.0, 1.0, 1.0};
+	std::cout << "Point outside of plane returns (0): " << renderer.FaceVertexCompare(poly, outside) << std::endl;
 
-	std::cout << "Point infront of plane: " << renderer.FaceVertexCompare(poly, infront_of_plane);
+	vec4 infront_of_plane = { 0.0, 0.0, -0.1, 1.0 };
+	std::cout << "Point infront of plane returns (0): " << renderer.FaceVertexCompare(poly, infront_of_plane) << std::endl;
+
+	vec4 behind_plane = { 0.0, 0.0, 0.1, 1.0 };
+	std::cout << "Point behind plane returns (1): " << renderer.FaceVertexCompare(poly, behind_plane) << std::endl;
+
+	vec4 on_plane = {0.0, 0.0, 0.0, 1.0};
+	std::cout << "Point on plane returns (0): " << renderer.FaceVertexCompare(poly, on_plane) << std::endl;
+
+	vec4 infront_of_vertex = {1.0, 1.0, -0.1, 1.0};
+	std::cout << "Point infront of vertex returns (0): " << renderer.FaceVertexCompare(poly, infront_of_vertex) << std::endl;
+
+	vec4 behind_vertex = { -1.0, 1.0, 0.1, 1.0 };
+	std::cout << "Point behind vertex returns (1): " << renderer.FaceVertexCompare(poly, behind_vertex) << std::endl;
+
+	std::cout << "Poly Normal: " << poly->GetScreenNormal().x << "," << poly->GetScreenNormal().y << "," << poly->GetScreenNormal().z << std::endl;
+
+
+
 
 
 	return 0;

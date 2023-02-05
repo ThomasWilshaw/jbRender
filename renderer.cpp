@@ -60,6 +60,7 @@ bool Renderer::Render()
 
 	// Draw Edges
 	for each (Edge * edge in edge_list_) {
+
 		// Calculate QI
 		int QI = 0;
 		for each (Polygon * poly in scene_->GetPolygons()) {
@@ -101,7 +102,7 @@ bool Renderer::Render()
 			double d_3 = (p.x - r.x) * (q.y - r.y) - (q.x - r.x) * (p.y - r.y);
 			double d_4 = d_1 - d_2 + d_3;
 
-			std::cout << "d_1: " << d_1 << " d_2: " << d_2 << " d_3: " << d_3 << " d_4: " << d_4 << std::endl;
+			//std::cout << "d_1: " << d_1 << " d_2: " << d_2 << " d_3: " << d_3 << " d_4: " << d_4 << std::endl;
 
 			if (signbit(d_3 * d_4) == 0) {
 				continue;
@@ -111,7 +112,7 @@ bool Renderer::Render()
 			double beta = d_3 / (d_3 - d_4);
 			
 
-			if (alpha == 0 || beta == 0 || alpha == 1 || beta == 1) {
+			if (alpha <= 0 || beta <= 0 || alpha >= 1 || beta >= 1) {
 				continue;
 			}
 			//std::cout.precision(17);
@@ -132,7 +133,7 @@ bool Renderer::Render()
 			}
 
 			//std::cout << "z_i: " << z_i << " z_j:" << z_j << std::endl;
-			int deltaIQ = d_1 > 0 ? 1 : -1;
+			int deltaIQ = d_1 < 0 ? 1 : -1;
 
 			intersection_list.emplace(alpha, deltaIQ);
 		}
@@ -147,8 +148,13 @@ bool Renderer::Render()
 		// Draw Edge
 		std::vector<vec3> edge_divided_by_w = edge->GetEdgeDividedByW();
 
-		if (0) {
+		if (1) {
+			if (QI == 0) {
+				continue;
+			}
 			frame_->MoveTo(edge_divided_by_w.at(0));
+			//std::cout << edge_divided_by_w.at(0).x << " " << edge_divided_by_w.at(0).y << " " << edge_divided_by_w.at(0).z << std::endl;
+			//std::cout << edge_divided_by_w.at(1).x << " " << edge_divided_by_w.at(1).y << " " << edge_divided_by_w.at(1).y << std::endl;
 			frame_->DrawTo(edge_divided_by_w.at(1));
 		}
 		else {
@@ -244,17 +250,16 @@ bool Renderer::FaceVertexCompare(Polygon* poly, vec4 vertex)
 		*/
 
 		vec3 normal = poly->GetScreenNormal();
-		vec3 point_on_plane = DivideByW(poly->GetVertices().at(1));
+		vec3 point_on_plane = DivideByW(poly->GetVertices().at(2));
 
 		double z = ((-normal.x * (v.x - point_on_plane.x) - normal.y * (v.y - point_on_plane.y)) / normal.z) + point_on_plane.z;
 
-		if (abs(z - v.z) < 0.0001) {
+		if (abs(z - v.z) < 0.0000001) {
 			return false;
 		}
-		
 
-		if (z > v.z) {
-			//std::cout << "z: " << z << " v.z: " << v.z << std::endl;
+		if (z < v.z) {
+			std::cout << "z: " << z << " v.z: " << v.z << std::endl;
 			return true;
 		}
 	}
