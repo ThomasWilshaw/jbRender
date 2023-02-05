@@ -11,9 +11,10 @@
 class Frame
 {
 public:
-	Frame(int x, int y, Imf::Rgba color, int scale = 1000);
+	Frame(int x, int y, Imf::Rgba color, const char* filename = "out.exr", int scale = 1000);
 
-	bool WriteFrame(const char* filename = "out.exr");
+	bool WriteFrame(const char* filename);
+	bool WriteFrame();
 
 	void SetPixel(int x, int y, Imf::Rgba color);
 	void SetPixel(int x, int y, double c);
@@ -49,6 +50,8 @@ private:
 	double current_y_;
 
 	Imf::Rgba* rgba_data_;
+
+	const char* filename_;
 };
 
 #endif

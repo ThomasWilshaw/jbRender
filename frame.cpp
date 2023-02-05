@@ -6,12 +6,13 @@
 
 #include"frame.h"
 
-Frame::Frame(int x, int y, Imf::Rgba colour, int scale) :
+Frame::Frame(int x, int y, Imf::Rgba colour, const char* filename, int scale) :
 	x_res_(x),
 	y_res_(y),
     scale_(scale),
     current_x_(0.0),
-    current_y_(0.0)
+    current_y_(0.0),
+    filename_(filename)
 {
     rgba_data_ = new Imf::Rgba[x_res_ * y_res_];
     for (int i = 0; i < x_res_ * y_res_; i++) {
@@ -35,6 +36,11 @@ bool Frame::WriteFrame(const char* filename)
 
         return false;
     }
+}
+
+bool Frame::WriteFrame()
+{
+    return WriteFrame(filename_);
 }
 
 void Frame::SetPixel(int x, int y, Imf::Rgba color)
@@ -162,6 +168,9 @@ void Frame::DrawTo(double x, double y)
 
     current_x_ = scaled_x;
     current_y_ = scaled_y;
+
+    //WriteFrame();
+    //std::cin.get();
 }
 
 void Frame::DrawTo(vec3 point)

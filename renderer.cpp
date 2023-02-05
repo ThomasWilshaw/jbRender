@@ -107,7 +107,7 @@ bool Renderer::Render()
 			double d_3 = (p.x - r.x) * (q.y - r.y) - (q.x - r.x) * (p.y - r.y);
 			double d_4 = d_1 - d_2 + d_3;
 
-			//std::cout << "d_1: " << d_1 << " d_2: " << d_2 << " d_3: " << d_3 << " d_4: " << d_4 << std::endl;
+			std::cout << "d_1: " << d_1 << " d_2: " << d_2 << " d_3: " << d_3 << " d_4: " << d_4 << std::endl;
 
 			if (signbit(d_3 * d_4) == 0) {
 				continue;
@@ -136,7 +136,7 @@ bool Renderer::Render()
 			}
 
 			if (abs(z_i - z_j) < 0.00001) {
-				continue;
+				//continue;
 			}
 
 			//std::cout << "z_i: " << z_i << " z_j:" << z_j << std::endl;
@@ -156,7 +156,7 @@ bool Renderer::Render()
 		std::vector<vec3> edge_divided_by_w = edge->GetEdgeDividedByW();
 
 		if (0) {
-			if (QI == 0) {
+			if (intersection_list.size() != 0) {
 				continue;
 			}
 			frame_->MoveTo(edge_divided_by_w.at(0));
