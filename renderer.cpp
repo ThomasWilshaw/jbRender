@@ -2,7 +2,8 @@
 
 Renderer::Renderer(Scene* scene, Frame* frame) :
 	scene_(scene),
-	frame_(frame)
+	frame_(frame),
+	wireframe_(false)
 {
 
 }
@@ -155,9 +156,9 @@ bool Renderer::Render()
 		// Draw Edge
 		std::vector<vec3> edge_divided_by_w = edge->GetEdgeDividedByW();
 
-		if (0) {
+		if (wireframe_) {
 			if (intersection_list.size() != 0) {
-				continue;
+				//continue;
 			}
 			frame_->MoveTo(edge_divided_by_w.at(0));
 			frame_->DrawTo(edge_divided_by_w.at(1));

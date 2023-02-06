@@ -7,8 +7,9 @@
 #include "maths.h"
 #include "object.h"
 
-Tokenizer::Tokenizer(const std::string filename, Scene* scene):
-    scene_(scene)
+Tokenizer::Tokenizer(const std::string filename, Scene* scene, Renderer* renderer):
+    scene_(scene),
+    renderer_(renderer)
 {
     C = new Matrix();
     C->SetIdentity();
@@ -31,6 +32,23 @@ Tokenizer::Tokenizer(const std::string filename, Scene* scene):
         char trash[5];
 
         if (!line.compare(0, 1, "#")) {
+            continue;
+        }
+
+        if (!line.compare(0, 2, "/*")) {
+            while (!in.eof()){
+                std::getline(in, line);
+                std::istringstream itt(line.c_str());
+
+                if (!line.compare(0, 2, "*/")) {
+                    break;
+                }
+            }
+            continue;
+        }
+
+        if (!line.compare(0, 4, "WIRE")) {
+            renderer_->SetWireFrameMode(true);
             continue;
         }
 

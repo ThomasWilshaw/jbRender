@@ -6,6 +6,7 @@
 
 #include "frame.h"
 #include"object.h"
+#include "renderer.h"
 #include "stack.h"
 #include "Scene.h"
 
@@ -13,7 +14,7 @@
 class Tokenizer
 {
 public:
-	Tokenizer(const std::string filename, Scene* scene);
+	Tokenizer(const std::string filename, Scene* scene, Renderer* renderer);
 
 private:
 	void LoadObjects();
@@ -25,6 +26,7 @@ private:
 	Matrix* C;
 	Stack stack_;
 	Scene *scene_;
+	Renderer* renderer_;
 };
 
 #endif

@@ -25,10 +25,11 @@ int main()
 
     Scene* scene = new Scene();
 
-    Tokenizer t("..\\..\\..\\program.jbr", scene);
+    Renderer* engine = new Renderer(scene, &frame);
 
-    Renderer engine(scene, &frame);
-    engine.Render();
+    Tokenizer t("..\\..\\..\\program.jbr", scene, engine);
+    
+    engine->Render();
 
     if (frame.WriteFrame()) {
         std::cout << "Frame written" << std::endl;
