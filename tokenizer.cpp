@@ -136,6 +136,9 @@ Tokenizer::Tokenizer(const std::string filename, Scene* scene, Renderer* rendere
 
 Object* Tokenizer::GetObjectFromName(std::string obj)
 {
+    if (obj.compare(0, 6, "SPHERE") == 0) {
+        return obj_list_.at(5);
+    }
     if (obj.compare(0, 6, "MONKEY") == 0) {
         return obj_list_.at(4);
     }
@@ -169,4 +172,7 @@ void Tokenizer::LoadObjects()
 
     Object* monkey = new Object("..\\..\\..\\objects\\monkey.obj");
     obj_list_.push_back(monkey);
+
+    Object* sphere = new Object("..\\..\\..\\objects\\sphere.obj");
+    obj_list_.push_back(sphere);
 }
