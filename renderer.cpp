@@ -73,8 +73,7 @@ bool Renderer::Render()
 				}
 			}
 		}
-
-		//std::cout << "QI: " << QI << std::endl;
+		if (QI > 0) std::cout << "QI: " << QI << std::endl;
 
 		// Find intersections
 		//std::vector<Intersection> intersection_list;
@@ -149,7 +148,7 @@ bool Renderer::Render()
 		if (intersection_list.size() > 0) {
 			for (auto it = intersection_list.begin(); it != intersection_list.end(); ++it)
 			{
-				//std::cout << it->first << '\t' << it->second << std::endl;
+				std::cout << it->first << '\t' << it->second << std::endl;
 			}
 		}
 		
@@ -157,7 +156,7 @@ bool Renderer::Render()
 		std::vector<vec3> edge_divided_by_w = edge->GetEdgeDividedByW();
 
 		if (wireframe_) {
-			if (intersection_list.size() != 0) {
+			if (intersection_list.size() == 0) {
 				//continue;
 			}
 			frame_->MoveTo(edge_divided_by_w.at(0));
@@ -210,24 +209,34 @@ bool Renderer::FaceVertexCompare(Polygon* poly, vec4 vertex)
 	bool flag = false;
 	vec3 v = DivideByW(vertex);
 
-	for each (Edge * edge in poly->GetEdges()) {
-		std::vector<vec3> scene_edge = edge->GetEdgeDividedByW();
-		vec3 v_i = scene_edge.at(0);
-		vec3 v_i_plus_one = scene_edge.at(1);
-
-		double d_i = v_i.y - v.y;
-		double d_i_1 = v_i_plus_one.y - v.y;
-		if (signbit(d_i * d_i_1) == 0) {
-			continue;
+	for each (vec4 test_vertex in poly->GetVertices()) {
+		if (vertex.x == test_vertex.x && vertex.y == test_vertex.y) {
+			//std::cout << "Vertex on corner" << std::endl;
+			flag = true;
+			break;
 		}
+	}
 
-		double d_inf = v_i_plus_one.y - v_i.y;
-		double d     = (v_i_plus_one.y - v.y) * (v_i.x - v.x) - (v_i_plus_one.x - v.x) * (v_i.y - v.y);
-		if (signbit(d * d_inf) == 0) {
-			continue;
+	if (!flag) {
+		for each (Edge * edge in poly->GetEdges()) {
+			std::vector<vec3> scene_edge = edge->GetEdgeDividedByW();
+			vec3 v_i = scene_edge.at(0);
+			vec3 v_i_plus_one = scene_edge.at(1);
+
+			double d_i = v_i.y - v.y;
+			double d_i_1 = v_i_plus_one.y - v.y;
+			if (signbit(d_i * d_i_1) == 0) {
+				continue;
+			}
+
+			double d_inf = v_i_plus_one.y - v_i.y;
+			double d = (v_i_plus_one.y - v.y) * (v_i.x - v.x) - (v_i_plus_one.x - v.x) * (v_i.y - v.y);
+			if (signbit(d * d_inf) == 0) {
+				continue;
+			}
+
+			flag = !flag;
 		}
-
-		flag = !flag;
 	}
 
 	// If we cross an edge an odd number of times flag is true and we are inside a polygon
@@ -237,33 +246,23 @@ bool Renderer::FaceVertexCompare(Polygon* poly, vec4 vertex)
 		// Dot product normal and this vector and rearrange to find the z of this imaginary point
 		// if actual z is greater than imaginary z the point is behind plane as z axis goes away form eye.
 
-		/*
-		        //normal
-				double a = n.t[0];
-				double b = n.t[1];
-				double c = n.t[2];
-				//point on plane;
-				double x0 = pList->polys[j].p[0][0];
-				double y0 = pList->polys[j].p[0][1];
-				double z0 = pList->polys[j].p[0][2];
-				//test point
-				double x = testP[0];
-				double y = testP[1];
-				double z = ((-a*(x-x0) - b*(y-y0))/c) + z0;
-		*/
-
 		vec3 normal = poly->GetScreenNormal();
-		vec3 point_on_plane = DivideByW(poly->GetVertices().at(2));
+		vec3 point_on_plane = DivideByW(poly->GetVertices().at(0));
 
 		double z = ((-normal.x * (v.x - point_on_plane.x) - normal.y * (v.y - point_on_plane.y)) / normal.z) + point_on_plane.z;
 
-		if (abs(z - v.z) < 0.0000001) {
+		if (abs(z - v.z) < 0.001) {
+			//std::cout << "EQUAL Z: " << z << ", " << v.z << std::endl;
 			return false;
 		}
 
 		if (z < v.z) {
+			std::cout << "DIFF Z: " << z << ", " << v.z << std::endl;
+			Vec3Print(point_on_plane);
+			Vec3Print(v);
 			return true;
 		}
+		//std::cout << "DIFF: " << z << ", " << v.z << std::endl;
 	}
 	return false;
 }
