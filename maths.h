@@ -144,6 +144,17 @@ static vec3 Vec3Subtract(vec3 a, vec3 b)
 	return result;
 }
 
+static vec4 Vec4Subtract(vec4 a, vec4 b)
+{
+	vec4 result;
+	result.x = a.x - b.x;
+	result.y = a.y - b.y;
+	result.z = a.z - b.z;
+	result.w = a.w - b.w;
+
+	return result;
+}
+
 static void Vec3Print(vec3 v)
 {
 	std::cout << v.x << " " << v.y << " " << v.z << std::endl;

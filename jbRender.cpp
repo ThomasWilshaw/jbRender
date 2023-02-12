@@ -31,7 +31,7 @@ int main()
     
     engine->Render();
 
-    if (frame.WriteFrame()) {
+    if (frame.WriteFrame("render\\out_.exr")) {
         std::cout << "Frame written" << std::endl;
     }
     else {

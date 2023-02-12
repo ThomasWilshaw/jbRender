@@ -58,6 +58,12 @@ int main(int argc, char** argv)
 	vec4 infront_but_close = {0.999, 0.998, -0.1, 1.0};
 	std::cout << "Point infront of plane and close to vertex returns (0): " << renderer.FaceVertexCompare(poly, infront_but_close) << std::endl;
 
+	vec4 behind_by_a_small_amount = { 0.0, 0.0, 0.000001, 1.0 };
+	std::cout << "Point only just behind plane returns (1):" << renderer.FaceVertexCompare(poly, behind_by_a_small_amount) << std::endl;
+
+	vec4 infront_by_a_small_amount = { 0.0, 0.0, -0.000001, 1.0 };
+	std::cout << "Point only just infront of plane returns (0):" << renderer.FaceVertexCompare(poly, infront_by_a_small_amount) << std::endl;
+
 
 
 

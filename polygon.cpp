@@ -76,3 +76,18 @@ bool Polygon::ContainsEdge(Edge* edge)
 
 	return false;
 }
+
+vec4 Polygon::PointOnPlane()
+{
+	vec4 point;
+
+	vec4 diff = Vec4Subtract(vertices_.at(1), vertices_.at(0));
+
+	point.x = vertices_.at(0).x + 0.5 * diff.x;
+	point.y = vertices_.at(0).y + 0.5 * diff.y;
+	point.z = vertices_.at(0).z + 0.5 * diff.z;
+	point.w = vertices_.at(0).w + 0.5 * diff.w;
+
+	
+	return point;
+}

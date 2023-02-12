@@ -25,6 +25,8 @@ public:
 
 	bool ContainsEdge(Edge* edge);
 
+	vec4 PointOnPlane();
+
 private:
 	std::vector<Edge*> edges_;
 	std::vector<vec4> vertices_;

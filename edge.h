@@ -19,6 +19,8 @@ public:
 	void SetBoundary(bool boundary) { boundary_ = boundary; };
 	bool GetBoundary() { return boundary_; };
 
+	void PrintEdge();
+
 private:
 	std::vector<vec4> vertices_;
 	std::vector<vec4>* hash_key_;

@@ -80,3 +80,26 @@ std::vector <vec3> Edge::GetEdgeDividedByW()
 
 	return new_edge;
 }
+
+void Edge::PrintEdge()
+{
+	std::cout << "(";
+	std::cout << vertices_.at(0).x;
+	std::cout << ", ";
+	std::cout << vertices_.at(0).y;
+	std::cout << ", ";
+	std::cout << vertices_.at(0).z;
+	std::cout << ")";
+
+	std::cout << " -> ";
+
+	std::cout << "(";
+	std::cout << vertices_.at(1).x;
+	std::cout << ", ";
+	std::cout << vertices_.at(1).y;
+	std::cout << ", ";
+	std::cout << vertices_.at(1).z;
+	std::cout << ")";
+
+	std::cout << std::endl;
+}

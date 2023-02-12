@@ -136,6 +136,9 @@ Tokenizer::Tokenizer(const std::string filename, Scene* scene, Renderer* rendere
 
 Object* Tokenizer::GetObjectFromName(std::string obj)
 {
+    if (obj.compare(0, 6, "B_CUBE") == 0) {
+        return obj_list_.at(6);
+    }
     if (obj.compare(0, 6, "SPHERE") == 0) {
         return obj_list_.at(5);
     }
@@ -175,4 +178,7 @@ void Tokenizer::LoadObjects()
 
     Object* sphere = new Object("..\\..\\..\\objects\\sphere.obj");
     obj_list_.push_back(sphere);
+
+    Object* b_cube = new Object("..\\..\\..\\objects\\extrude_cube.obj");
+    obj_list_.push_back(b_cube);
 }

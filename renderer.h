@@ -14,6 +14,12 @@
 class Renderer
 {
 public:
+    struct Intersection {
+        double alpha;
+        int deltaIQ;
+        bool valid;
+    };
+
     Renderer::Renderer(Scene* scene, Frame* frame);
 
     bool Render();
@@ -21,6 +27,8 @@ public:
     bool FaceVertexCompare(Polygon* poly, vec4 vertex);
 
     std::map<double, int> BoundaryEdgeCompare(Edge* edge);
+
+    Intersection EdgeEdgeCompare(Edge* edge, Edge* test_edge);
 
     void SetWireFrameMode(bool b) { wireframe_ = b; };
 
