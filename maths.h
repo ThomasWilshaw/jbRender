@@ -34,59 +34,6 @@ enum axis {
 	kAxisZ
 };
 
-// Stores an edge as two vec4
-class Edge
-{
-public:
-	Edge(vec4 a, vec4 b);
-
-	vec4 GetA();
-	vec4 GetB();
-
-	std::vector<vec3> GetEdgeDividedByW();
-
-	std::vector<vec4>* GetHashKey() { return hash_key_; };
-
-	bool Compare(const Edge* e) const;
-
-	void SetBoundary(bool boundary) { boundary_ = boundary; };
-	bool GetBoundary() { return boundary_; };
-
-private:
-	std::vector<vec4> vertices_;
-	std::vector<vec4>* hash_key_;
-	bool boundary_;
-
-};
-
-// Stores a polygon as a list of edges and vertices
-class Polygon
-{
-public:
-	Polygon();
-
-	void AddEdge(Edge* edge);
-
-	std::vector<Edge*> GetEdges();
-
-	void AddVertex(vec4 vertex);
-	std::vector<vec4> GetVertices() { return vertices_; };
-
-	bool CullTest();
-	bool GetCull() { return cull_; };
-
-	vec3 GetScreenNormal();
-
-	bool ContainsEdge(Edge* edge);
-
-private:
-	std::vector<Edge*> edges_;
-	std::vector<vec4> vertices_;
-
-	bool cull_;
-};
-
-
 /*
 * Matricies are stored in a row major order 
 * m[row][column]
@@ -200,6 +147,12 @@ static vec3 Vec3Subtract(vec3 a, vec3 b)
 static void Vec3Print(vec3 v)
 {
 	std::cout << v.x << " " << v.y << " " << v.z << std::endl;
+}
+
+static void Vec3Print(vec4 v)
+{
+	vec3 temp = { v.x, v.y, v.z };
+	Vec3Print(temp);
 }
 
 static vec3 Vec3Cross(vec3 a, vec3 b)

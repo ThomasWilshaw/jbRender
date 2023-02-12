@@ -1,8 +1,10 @@
 #ifndef RENDERER_H
 #define RENDERER_H
 
+#include "edge.h"
 #include "frame.h"
 #include "maths.h"
+#include "polygon.h"
 #include "Scene.h"
 
 #include <map>
@@ -17,6 +19,8 @@ public:
     bool Render();
 
     bool FaceVertexCompare(Polygon* poly, vec4 vertex);
+
+    std::map<double, int> BoundaryEdgeCompare(Edge* edge);
 
     void SetWireFrameMode(bool b) { wireframe_ = b; };
 

@@ -61,7 +61,6 @@ bool Renderer::Render()
 
 	// Draw Edges
 	for each (Edge * edge in edge_list_) {
-
 		// Calculate QI
 		int QI = 0;
 		for each (Polygon * poly in scene_->GetPolygons()) {
@@ -77,80 +76,8 @@ bool Renderer::Render()
 
 		// Find intersections
 		//std::vector<Intersection> intersection_list;
-		std::map<double, int> intersection_list;
-		for each(Edge * boundary_edge in boundary_edges_) {
-			if (edge->Compare(boundary_edge)) {
-				continue;
-			}
-
-			std::vector<vec3> a_screen = edge->GetEdgeDividedByW();
-			std::vector<vec3> b_screen = boundary_edge->GetEdgeDividedByW();
-
-			double pz = edge->GetA().z;
-			double qz = edge->GetB().z;
-			double rz = boundary_edge->GetA().z;
-			double sz = boundary_edge->GetB().z;
-
-			vec3 p = a_screen.at(0);
-			vec3 q = a_screen.at(1);
-
-			vec3 r = b_screen.at(1);
-			vec3 s = b_screen.at(0);
-
-			double d_1 = (s.x - r.x) * (p.y - r.y) - (p.x - r.x) * (s.y - r.y);
-			double d_2 = (s.x - r.x) * (q.y - r.y) - (q.x - r.x) * (s.y - r.y);
-
-			if (signbit(d_1 * d_2) == 0) {
-				continue;
-			}
-
-			double d_3 = (p.x - r.x) * (q.y - r.y) - (q.x - r.x) * (p.y - r.y);
-			double d_4 = d_1 - d_2 + d_3;
-
-			//std::cout << "d_1: " << d_1 << " d_2: " << d_2 << " d_3: " << d_3 << " d_4: " << d_4 << std::endl;
-
-			if (signbit(d_3 * d_4) == 0) {
-				continue;
-			}
-
-			double alpha = d_1 / (d_1 - d_2);
-			double beta = d_3 / (d_3 - d_4);
-			
-
-			if (alpha <= 0 || beta <= 0 || alpha >= 1 || beta >= 1) {
-				continue;
-			}
-			//std::cout.precision(17);
-			//std::cout << "alpha: " << alpha << " beta: " << beta << std::endl;
-			double z_i = p.z + alpha * (q.z - p.z);
-			double z_j = s.z + beta * (r.z - s.z);
-
-			//std::cout << "z_i: " << z_i << " z_j:" << z_j << std::endl;
-
-			if (z_i < z_j) {
-				continue;
-			}
-
-			if (alpha == 1.0) {
-				//continue;
-			}
-
-			if (abs(z_i - z_j) < 0.00001) {
-				//continue;
-			}
-
-			//std::cout << "z_i: " << z_i << " z_j:" << z_j << std::endl;
-			int deltaIQ = d_1 > 0 ? 1 : -1;
-			//std::cout << "d_1: " << d_1 << " d_2: " << d_2 << " d_3: " << d_3 << " d_4: " << d_4 << std::endl;
-			intersection_list.emplace(alpha, deltaIQ);
-		}
-		//std::cout << "Intersections: " << intersection_list.size() << std::endl;
-		if (intersection_list.size() > 0) {
-			for (auto it = intersection_list.begin(); it != intersection_list.end(); ++it)
-			{
-				std::cout << it->first << '\t' << it->second << std::endl;
-			}
-		}
+		std::map<double, int> intersection_list = BoundaryEdgeCompare(edge);
+		
 		
 		// Draw Edge
 		std::vector<vec3> edge_divided_by_w = edge->GetEdgeDividedByW();
@@ -257,12 +184,95 @@ bool Renderer::FaceVertexCompare(Polygon* poly, vec4 vertex)
 		}
 
 		if (z < v.z) {
-			std::cout << "DIFF Z: " << z << ", " << v.z << std::endl;
-			Vec3Print(point_on_plane);
-			Vec3Print(v);
+			//std::cout << "DIFF Z: " << z << ", " << v.z << std::endl;
+			//Vec3Print(point_on_plane);
+			//Vec3Print(v);
 			return true;
 		}
 		//std::cout << "DIFF: " << z << ", " << v.z << std::endl;
 	}
 	return false;
+}
+
+std::map<double, int> Renderer::BoundaryEdgeCompare(Edge* edge)
+{
+	std::map<double, int> intersection_list;
+	for each (Edge * boundary_edge in boundary_edges_) {
+		if (edge->Compare(boundary_edge)) {
+			continue;
+		}
+
+		std::vector<vec3> a_screen = edge->GetEdgeDividedByW();
+		std::vector<vec3> b_screen = boundary_edge->GetEdgeDividedByW();
+
+		double pz = edge->GetA().z;
+		double qz = edge->GetB().z;
+		double rz = boundary_edge->GetA().z;
+		double sz = boundary_edge->GetB().z;
+
+		vec3 p = a_screen.at(0);
+		vec3 q = a_screen.at(1);
+
+		vec3 r = b_screen.at(1);
+		vec3 s = b_screen.at(0);
+
+		double d_1 = (s.x - r.x) * (p.y - r.y) - (p.x - r.x) * (s.y - r.y);
+		double d_2 = (s.x - r.x) * (q.y - r.y) - (q.x - r.x) * (s.y - r.y);
+
+		if (signbit(d_1 * d_2) == 0) {
+			continue;
+		}
+
+		double d_3 = (p.x - r.x) * (q.y - r.y) - (q.x - r.x) * (p.y - r.y);
+		double d_4 = d_1 - d_2 + d_3;
+
+		
+
+		if (signbit(d_3 * d_4) == 0) {
+			continue;
+		}
+
+		//std::cout << "d_1: " << d_1 << " d_2: " << d_2 << " d_3: " << d_3 << " d_4: " << d_4 << std::endl;
+
+		double alpha = d_1 / (d_1 - d_2);
+		double beta = d_3 / (d_3 - d_4);
+		std::cout << "alpha: " << alpha << " beta: " << beta << std::endl;
+
+		if (alpha <= 0 || beta <= 0 || alpha >= 1 || beta >= 1) {
+			//continue;
+		}
+		//std::cout.precision(17);
+		//
+		double z_i = p.z + alpha * (q.z - p.z);
+		double z_j = s.z + beta * (r.z - s.z);
+
+		std::cout << "z_i: " << z_i << " z_j:" << z_j << std::endl;
+
+		if (z_i < z_j) {
+			continue;
+		}
+
+		if (alpha == 1.0) {
+			//continue;
+		}
+
+		if (abs(z_i - z_j) < 0.00001) {
+			//continue;
+		}
+
+		//std::cout << "z_i: " << z_i << " z_j:" << z_j << std::endl;
+		int deltaIQ = d_1 > 0 ? 1 : -1;
+		//std::cout << "d_1: " << d_1 << " d_2: " << d_2 << " d_3: " << d_3 << " d_4: " << d_4 << std::endl;
+		intersection_list.emplace(alpha, deltaIQ);
+	}
+	
+	//std::cout << "Intersections: " << intersection_list.size() << std::endl;
+	if (intersection_list.size() > 0) {
+		for (auto it = intersection_list.begin(); it != intersection_list.end(); ++it)
+		{
+			std::cout << it->first << '\t' << it->second << std::endl;
+		}
+	}
+
+	return intersection_list;
 }

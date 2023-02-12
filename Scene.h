@@ -2,8 +2,12 @@
 #define SCENE_H
 
 #include <vector>
+#include "edge.h"
+#include "edge.h"
 #include "maths.h"
 #include "object.h"
+#include "polygon.h"
+
 
 // Stores all the actual polygons in their transformed state.
 class Scene
