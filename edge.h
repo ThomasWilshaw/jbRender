@@ -12,8 +12,6 @@ public:
 
 	std::vector<vec3> GetEdgeDividedByW();
 
-	std::vector<vec4>* GetHashKey() { return hash_key_; };
-
 	bool Compare(const Edge* e) const;
 
 	void SetBoundary(bool boundary) { boundary_ = boundary; };
@@ -23,7 +21,6 @@ public:
 
 private:
 	std::vector<vec4> vertices_;
-	std::vector<vec4>* hash_key_;
 	bool boundary_;
 
 };

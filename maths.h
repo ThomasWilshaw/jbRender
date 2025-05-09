@@ -178,6 +178,16 @@ static vec3 Vec3Cross(vec3 a, vec3 b)
 	return result;
 }
 
+static bool Vec4Compare(vec4 a, vec4 b)
+{
+	bool x = a.x == b.x;
+	bool y = a.y == b.y;
+	bool z = a.z == b.z;
+	bool w = a.w == b.w;
+
+	return x && y && z && w;
+}
+
 
 
 #endif

@@ -8,46 +8,23 @@ Edge::Edge(vec4 a, vec4 b) :
 
 	double size_a = magnitude(a);
 	double size_b = magnitude(b);
-
-	hash_key_ = new std::vector<vec4>();
-
-	size_a < size_b ? hash_key_->push_back(a) : hash_key_->push_back(b);
-	size_b > size_a ? hash_key_->push_back(b) : hash_key_->push_back(a);
 }
 
 bool Edge::Compare(const Edge* e) const
 {
-	if (hash_key_->size() != 2) {
+	if (Vec4Compare(vertices_.at(0), e->vertices_.at(0))) {
+		if (Vec4Compare(vertices_.at(1), e->vertices_.at(1))) {
+			return true;
+		}
+	}
+	else if (Vec4Compare(vertices_.at(1), e->vertices_.at(0))) {
+		if (Vec4Compare(vertices_.at(0), e->vertices_.at(1))) {
+			return true;
+		}
+	}
+	else {
 		return false;
 	}
-
-	if (hash_key_->at(0).x != e->hash_key_->at(0).x) {
-		return false;
-	}
-	if (hash_key_->at(0).y != e->hash_key_->at(0).y) {
-		return false;
-	}
-	if (hash_key_->at(0).z != e->hash_key_->at(0).z) {
-		return false;
-	}
-	if (hash_key_->at(0).w != e->hash_key_->at(0).w) {
-		return false;
-	}
-
-	if (hash_key_->at(1).x != e->hash_key_->at(1).x) {
-		return false;
-	}
-	if (hash_key_->at(1).y != e->hash_key_->at(1).y) {
-		return false;
-	}
-	if (hash_key_->at(1).z != e->hash_key_->at(1).z) {
-		return false;
-	}
-	if (hash_key_->at(1).w != e->hash_key_->at(1).w) {
-		return false;
-	}
-
-	return true;
 }
 
 vec4 Edge::GetA()
