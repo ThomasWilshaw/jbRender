@@ -1,14 +1,14 @@
 #ifndef EDGE_H
 #define EDGE_H
 #include "maths.h"
-// Stores an edge as two vec4
+// Stores an edge as two pointers to vec4
 class Edge
 {
 public:
-	Edge(vec4 a, vec4 b);
+	Edge(vec4* a, vec4* b);
 
-	vec4 GetA();
-	vec4 GetB();
+	vec4* GetA();
+	vec4* GetB();
 
 	std::vector<vec3> GetEdgeDividedByW();
 
@@ -20,7 +20,7 @@ public:
 	void PrintEdge(bool divide_by_w = false);
 
 private:
-	std::vector<vec4> vertices_;
+	std::vector<vec4*> vertices_;
 	bool boundary_;
 
 };

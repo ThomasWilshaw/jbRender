@@ -78,20 +78,23 @@ private:
 
 
 // static functions
+// 
 // Multiply a vec4 by a 4x4 matrix
-static vec4 TransformVector(vec4 v, Matrix* C) {
-	struct vec4 output = {0, 0, 0, 1};
+// Returns a pointer to a new vec4
+static vec4* TransformVector(vec4 v, Matrix* C) {
+	vec4* output = new vec4();
 
-	output.x = v.x * C->data()[0][0] + v.y * C->data()[1][0] + v.z * C->data()[2][0] + v.w * C->data()[3][0];
-	output.y = v.x * C->data()[0][1] + v.y * C->data()[1][1] + v.z * C->data()[2][1] + v.w * C->data()[3][1];
-	output.z = v.x * C->data()[0][2] + v.y * C->data()[1][2] + v.z * C->data()[2][2] + v.w * C->data()[3][2];
-	output.w = v.x * C->data()[0][3] + v.y * C->data()[1][3] + v.z * C->data()[2][3] + v.w * C->data()[3][3];
+	output->x = v.x * C->data()[0][0] + v.y * C->data()[1][0] + v.z * C->data()[2][0] + v.w * C->data()[3][0];
+	output->y = v.x * C->data()[0][1] + v.y * C->data()[1][1] + v.z * C->data()[2][1] + v.w * C->data()[3][1];
+	output->z = v.x * C->data()[0][2] + v.y * C->data()[1][2] + v.z * C->data()[2][2] + v.w * C->data()[3][2];
+	output->w = v.x * C->data()[0][3] + v.y * C->data()[1][3] + v.z * C->data()[2][3] + v.w * C->data()[3][3];
 
 	return output;
 }
 
-// Multiply a vec3 by a 4x4 matrix (setw w to 1.0)
-static vec4 TransformVector(vec3 v, Matrix* C)
+// Multiply a vec3 by a 4x4 matrix (set w to 1.0)
+// Returns a pointer to a new vec4
+static vec4* TransformVector(vec3 v, Matrix* C)
 {
 	vec4 v4;
 	v4.x = v.x;
@@ -102,7 +105,7 @@ static vec4 TransformVector(vec3 v, Matrix* C)
 	return TransformVector(v4, C);
 }
 
-// Divide a vec4 by w. REturns a vec3
+// Divide a vec4 by w. Returns a vec3
 static vec3 DivideByW(vec4 v)
 {
 	vec3 output;
@@ -169,6 +172,18 @@ static void Vec3Print(vec4 v)
 static vec3 Vec3Cross(vec3 a, vec3 b)
 {
 	vec3 result = { 0.0, 0.0, 0.0};
+
+	result.x = a.y * b.z - a.z * b.y;
+	result.y = a.z * b.x - a.x * b.z;
+	result.z = a.x * b.y - a.y * b.x;
+
+	//Vec3Print(result);
+	return result;
+}
+
+static vec3 Vec3Cross(vec4 a, vec4 b)
+{
+	vec3 result = { 0.0, 0.0, 0.0 };
 
 	result.x = a.y * b.z - a.z * b.y;
 	result.y = a.z * b.x - a.x * b.z;

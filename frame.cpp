@@ -175,8 +175,12 @@ void Frame::MoveTo(vec3 point)
     MoveTo(point.x, point.y);
 }
 
-vec3 Frame::PushVertThroughPipeline(vec3 vert, Matrix *C)
+void Frame::DrawTo(vec4* point)
 {
-    vec4 trans_vert = TransformVector(vert, C);
-    return DivideByW(trans_vert);
+    DrawTo(point->x, point->y);
+}
+
+void Frame::MoveTo(vec4* point)
+{
+    MoveTo(point->x, point->y);
 }
