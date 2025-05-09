@@ -11,7 +11,8 @@ Frame::Frame(int x, int y, Imf::Rgba colour, int scale) :
 	y_res_(y),
     scale_(scale),
     current_x_(0.0),
-    current_y_(0.0)
+    current_y_(0.0),
+    line_color_(Imf::Rgba(0.0, 0.0, 0.0))
 {
     rgba_data_ = new Imf::Rgba[x_res_ * y_res_];
     for (int i = 0; i < x_res_ * y_res_; i++) {
@@ -37,29 +38,16 @@ bool Frame::WriteFrame(const char* filename)
     }
 }
 
-void Frame::SetPixel(int x, int y, Imf::Rgba color)
-{
-    if (0 <= x && x < x_res_ && 0 <= y && y < y_res_) {
-        //rgba_data_[y * x_res_ + x] = color;
-
-        int flip_y = y_res_ - 1- y;
-
-        // We're working in B&W so multiply the colour to make sure lines
-        // get darker as the cross
-        rgba_data_[flip_y * x_res_ + x].r *= color.r;
-        rgba_data_[flip_y * x_res_ + x].g *= color.g;
-        rgba_data_[flip_y * x_res_ + x].b *= color.b;
-    }
-    else {
-        //std::cout << "Pixel " << x << "," << y << " is outside frame size." << std::endl;
-    }
-}
-
 void Frame::SetPixel(int x, int y, double c)
 {
-    Imf::Rgba color(c, c, c, 1.0);
+    if (0 <= x && x < x_res_ && 0 <= y && y < y_res_) {
+        int flip_y = y_res_ - 1 - y;
 
-    SetPixel(x, y, color);
+        c = 1.0 - c;
+        rgba_data_[flip_y * x_res_ + x].r *= line_color_.r * c + 1.0 - c;
+        rgba_data_[flip_y * x_res_ + x].g *= line_color_.g * c + 1.0 - c;
+        rgba_data_[flip_y * x_res_ + x].b *= line_color_.b * c + 1.0 - c;
+    }
 }
 
 void Frame::DrawLine(double x0, double y0, double x1, double y1)

@@ -15,7 +15,6 @@ public:
 
 	bool WriteFrame(const char* filename = "out.exr");
 
-	void SetPixel(int x, int y, Imf::Rgba color);
 	void SetPixel(int x, int y, double c);
 
 	void DrawLine(double x0, double y0, double x1, double y1);
@@ -25,6 +24,8 @@ public:
 
 	void DrawTo(vec3 point);
 	void MoveTo(vec3 point);
+
+	void SetLineColor(Imf::Rgba color) { line_color_ = color; };
 
 	vec3 PushVertThroughPipeline(vec3 vert, Matrix *C);
 
@@ -49,6 +50,7 @@ private:
 	double current_y_;
 
 	Imf::Rgba* rgba_data_;
+	Imf::Rgba line_color_;
 };
 
 #endif
