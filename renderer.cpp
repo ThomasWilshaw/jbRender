@@ -40,7 +40,6 @@ bool Renderer::Render()
 	for each (Edge * edge in edge_list_) {
 		if (edge->GetBoundary()) {
 			boundary_edges_.push_back(edge);
-			edge->PrintEdge();
 		}
 	}
 	std::cout << "number of Boundary Edges: " << boundary_edges_.size() << std::endl;
@@ -100,6 +99,7 @@ bool Renderer::Render()
 				}
 				else if (QI == 0 && it->second == 1) {
 					frame_->DrawTo(new_point);
+					frame_->ResetLineColor();
 					//QI += it->second;
 					//continue;
 				}
@@ -112,9 +112,6 @@ bool Renderer::Render()
 			}
 
 			if (QI == 0) {
-				if (edge->GetBoundary()) {
-					frame_->SetLineColor(Imf::Rgba(1.0, 0.0, 0.0));
-				}
 				frame_->DrawTo(edge_divided_by_w.at(1));
 				frame_->ResetLineColor();
 			}

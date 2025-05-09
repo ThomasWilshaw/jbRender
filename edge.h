@@ -17,7 +17,7 @@ public:
 	void SetBoundary(bool boundary) { boundary_ = boundary; };
 	bool GetBoundary() { return boundary_; };
 
-	void PrintEdge();
+	void PrintEdge(bool divide_by_w = false);
 
 private:
 	std::vector<vec4> vertices_;
