@@ -3,7 +3,8 @@
 Renderer::Renderer(Scene* scene, Frame* frame) :
 	scene_(scene),
 	frame_(frame),
-	wireframe_(false)
+	wireframe_(false),
+	frame_number_(0)
 {
 
 }
@@ -266,5 +267,21 @@ std::map<double, int> Renderer::BoundaryEdgeCompare(Edge* edge)
 	}
 
 	return intersection_list;
+}
+
+void Renderer::SaveImage()
+{
+	std::string path = "D:\\src\\jbRender\\render\\out_" + std::to_string(frame_number_) + ".exr";
+	frame_->WriteFrame(path.c_str());
+	frame_->ClearFrame();
+
+	for (auto edge : edge_list_) {
+		delete edge;
+	}
+	edge_list_.clear();
+
+	boundary_edges_.clear();
+
+	frame_number_++;
 }
 

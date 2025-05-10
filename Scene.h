@@ -17,16 +17,15 @@ public:
 
 	void AddObject(Object* object, Matrix* C);
 
+	void Clear();
+
 	std::vector<Edge*> GetEdges() { return scene_edges_; };
 	std::vector<Polygon*> GetPolygons() { return scene_polys_; };
-	std::vector<Edge*> GetDividedEdges() { return divided_by_w_edges_; };
 
 
 private:
 	std::vector<Edge*> scene_edges_;
 	std::vector<Polygon*> scene_polys_;
-
-	std::vector<Edge*> divided_by_w_edges_;
 
 };
 

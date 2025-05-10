@@ -15,6 +15,8 @@ public:
 
 	bool WriteFrame(const char* filename = "out.exr");
 
+	void ClearFrame();
+
 	void SetPixel(int x, int y, double c);
 
 	void DrawLine(double x0, double y0, double x1, double y1);
@@ -53,6 +55,7 @@ private:
 
 	Imf::Rgba* rgba_data_;
 	Imf::Rgba line_color_;
+	Imf::Rgba frame_color_;
 };
 
 #endif

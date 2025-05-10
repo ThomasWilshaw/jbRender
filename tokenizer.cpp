@@ -35,6 +35,10 @@ Tokenizer::Tokenizer(const std::string filename, Scene* scene, Renderer* rendere
             continue;
         }
 
+        if (!line.compare(0, 1, "\n")) {
+            continue;
+        }
+
         if (!line.compare(0, 2, "/*")) {
             while (!in.eof()){
                 std::getline(in, line);
@@ -49,6 +53,14 @@ Tokenizer::Tokenizer(const std::string filename, Scene* scene, Renderer* rendere
 
         if (!line.compare(0, 4, "WIRE")) {
             renderer_->SetWireFrameMode(true);
+            continue;
+        }
+
+        if (!line.compare(0, 6, "RENDER")) {
+            renderer->Render();
+            renderer->SaveImage();
+            scene->Clear();
+            std::cout << "RENDER" << std::endl;
             continue;
         }
 

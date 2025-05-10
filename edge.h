@@ -10,6 +10,8 @@ public:
 	vec4* GetA();
 	vec4* GetB();
 
+	std::vector<vec4*> GetVerticies() { return vertices_; };
+
 	std::vector<vec3> GetEdgeDividedByW();
 
 	bool Compare(const Edge* e) const;

@@ -24,6 +24,8 @@ public:
 
     void Render();
 
+    void SaveImage();
+
     bool FaceVertexCompare(Polygon* poly, vec4* vertex);
 
     std::map<double, int> BoundaryEdgeCompare(Edge* edge);
@@ -38,6 +40,8 @@ private:
 
     Scene* scene_;
     Frame* frame_;
+
+    int frame_number_;
 
     std::vector<Edge*> edge_list_;
     std::vector<Edge*> boundary_edges_;

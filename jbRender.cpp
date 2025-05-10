@@ -29,12 +29,13 @@ int main()
 
     Tokenizer t("..\\..\\..\\program.jbr", scene, engine);
     
-    engine->Render();
-
+    //engine->Render();
+    /*
     if (frame.WriteFrame("D:\\src\\jbRender\\render\\out_.exr")) {
         std::cout << "Frame written" << std::endl;
     }
     else {
         std::cout << "Error";
     }
+    */
 }

@@ -12,11 +12,12 @@ Frame::Frame(int x, int y, Imf::Rgba colour, int scale) :
     scale_(scale),
     current_x_(0.0),
     current_y_(0.0),
-    line_color_(Imf::Rgba(0.0, 0.0, 0.0))
+    line_color_(Imf::Rgba(0.0, 0.0, 0.0)),
+    frame_color_(colour)
 {
     rgba_data_ = new Imf::Rgba[x_res_ * y_res_];
     for (int i = 0; i < x_res_ * y_res_; i++) {
-        rgba_data_[i] = colour;
+        rgba_data_[i] = frame_color_;
     }
 }
 
@@ -35,6 +36,13 @@ bool Frame::WriteFrame(const char* filename)
         std::cout << "Failed to write frame:" << e.what();
 
         return false;
+    }
+}
+
+void Frame::ClearFrame()
+{
+    for (int i = 0; i < x_res_ * y_res_; i++) {
+        rgba_data_[i] = frame_color_;
     }
 }
 

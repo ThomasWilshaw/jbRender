@@ -39,3 +39,22 @@ void Scene::AddObject(Object* object, Matrix *C)
 		scene_polys_.push_back(polygon);
 	}
 }
+
+void Scene::Clear()
+{
+	for (auto edge : scene_edges_) {
+		for (auto vert : edge->GetVerticies()) {
+			delete vert;
+		}
+		delete edge;
+	}
+	scene_edges_.clear();
+
+	for (auto polygon : scene_polys_) {
+		polygon->GetVertices().clear();
+		delete polygon;
+	}
+	scene_polys_.clear();
+
+
+}
