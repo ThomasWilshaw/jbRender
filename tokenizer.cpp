@@ -35,7 +35,7 @@ Tokenizer::Tokenizer(const std::string filename, Scene* scene, Renderer* rendere
             continue;
         }
 
-        if (!line.compare(0, 1, "\n")) {
+        if (line == "") {
             continue;
         }
 
@@ -128,7 +128,10 @@ Tokenizer::Tokenizer(const std::string filename, Scene* scene, Renderer* rendere
             iss >> trash;
             iss >> object_name;
 
-            scene_->AddObject(GetObjectFromName(object_name), C);
+            Object* object = GetObjectFromName(object_name);
+            if (object) {
+                scene_->AddObject(object, C);
+            }
 
         } else if (!line.compare(0, 4, "PUSH")){
             stack_.Push(*C);
@@ -169,6 +172,9 @@ Object* Tokenizer::GetObjectFromName(std::string obj)
     if (obj.compare(0, 7, "PYRAMID") == 0) {
         return obj_list_.at(0);
     }
+
+    std::cout << "ERROR: Invalid object: " << obj << std::endl;
+    return nullptr;
 }
 
 void Tokenizer::LoadObjects()
