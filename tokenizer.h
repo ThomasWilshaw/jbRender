@@ -27,6 +27,8 @@ private:
 	Stack stack_;
 	Scene *scene_;
 	Renderer* renderer_;
+
+	bool wireframe_state_;
 };
 
 #endif

@@ -30,12 +30,16 @@ public:
 
 	vec4 PointOnPlane();
 
+	void SetWireframe(bool wireframe) { wireframe_ = wireframe; };
+	bool GetWireframe() { return wireframe_; };
+
 private:
 	std::vector<Edge*> edges_;
 	std::vector<vec4*> vertices_;
 
 	bool cull_;
 	bool projection_performed_;
+	bool wireframe_;
 };
 
 #endif

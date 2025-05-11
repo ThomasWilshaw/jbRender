@@ -2,7 +2,8 @@
 
 Polygon::Polygon() :
 	cull_(false),
-	projection_performed_(false)
+	projection_performed_(false),
+	wireframe_(false)
 {
 }
 

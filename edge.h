@@ -19,11 +19,15 @@ public:
 	void SetBoundary(bool boundary) { boundary_ = boundary; };
 	bool GetBoundary() { return boundary_; };
 
+	void SetWireframe(bool wireframe) { wireframe_ = wireframe; };
+	bool GetWireframe() { return wireframe_; };
+
 	void PrintEdge(bool divide_by_w = false);
 
 private:
 	std::vector<vec4*> vertices_;
 	bool boundary_;
+	bool wireframe_;
 
 };
 

@@ -3,7 +3,6 @@
 Renderer::Renderer(Scene* scene, Frame* frame) :
 	scene_(scene),
 	frame_(frame),
-	wireframe_(false),
 	frame_number_(0)
 {
 
@@ -15,11 +14,9 @@ void Renderer::Render()
 	// and boundary edge lists
 	for (auto polygon : scene_->GetPolygons()) {
 		polygon->ApplyProjectionTransform();
-		if (!wireframe_) {
-			// Skip polgons that are culled
-			if (polygon->CullTest()) {
-				continue;
-			}
+		// Skip polgons that are culled
+		if (polygon->CullTest() && !polygon->GetWireframe()) {
+			continue;
 		}
 
 		for (auto edge : polygon->GetEdges()) {
@@ -44,7 +41,7 @@ void Renderer::Render()
 
 	// Generate boundry list
 	for (auto edge : edge_list_) {
-		if (edge->GetBoundary()) {
+		if (edge->GetBoundary() && !edge->GetWireframe()) {
 			boundary_edges_.push_back(edge);
 		}
 	}
@@ -53,12 +50,13 @@ void Renderer::Render()
 	for (auto edge : edge_list_) {
 
 		// If rendering a wireframe draw all edges
+		/*
 		if (wireframe_) {
 		    frame_->MoveTo(edge->GetA());
 		    frame_->DrawTo(edge->GetB());
 
 			continue;
-		}
+		*/
 
 		// Generate intersection list
 		std::map<double, int> intersection_list = BoundaryEdgeCompare(edge);
@@ -71,8 +69,10 @@ void Renderer::Render()
 			if (!polygon->GetCull()) {
 				// Don't compare to own polygon
 				if (!polygon->ContainsEdge(edge)) {
-					if (FaceVertexCompare(polygon, edge->GetA())) {
-						QI++;
+					if (!polygon->GetWireframe()) {
+						if (FaceVertexCompare(polygon, edge->GetA())) {
+							QI++;
+						}
 					}
 				}
 			}

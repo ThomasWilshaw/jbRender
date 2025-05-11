@@ -32,8 +32,6 @@ public:
     
     Intersection EdgeEdgeCompare(Edge* edge, Edge* test_edge);
 
-    void SetWireFrameMode(bool b) { wireframe_ = b; };
-
 private:
     
     //double EdgeEdgeCompare(Edge* a, Edge* b);
@@ -45,8 +43,6 @@ private:
 
     std::vector<Edge*> edge_list_;
     std::vector<Edge*> boundary_edges_;
-
-    bool wireframe_;
 };
 
 #endif

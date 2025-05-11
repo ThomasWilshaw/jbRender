@@ -1,7 +1,8 @@
 #include "edge.h"
 
 Edge::Edge(vec4* a, vec4* b) :
-	boundary_(true)
+	boundary_(true),
+	wireframe_(false)
 {
 	vertices_.push_back(a);
 	vertices_.push_back(b);

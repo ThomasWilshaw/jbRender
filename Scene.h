@@ -15,7 +15,7 @@ class Scene
 public:
 	Scene();
 
-	void AddObject(Object* object, Matrix* C);
+	void AddObject(Object* object, Matrix* C, bool wireframe);
 
 	void Clear();
 

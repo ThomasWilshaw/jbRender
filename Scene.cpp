@@ -3,10 +3,14 @@
 Scene::Scene()
 {}
 
-void Scene::AddObject(Object* object, Matrix *C)
+void Scene::AddObject(Object* object, Matrix *C, bool wireframe)
 {
 	for (int i = 0; i < object->PolyCount(); i++) {
 		Polygon* polygon = new Polygon();
+
+		if (wireframe) {
+			polygon->SetWireframe(true);
+		}
 
 		// Polygon stores a list of vertices and a list edges which point to them
 		vec4* transformed_vector_a;
@@ -26,6 +30,9 @@ void Scene::AddObject(Object* object, Matrix *C)
 			polygon->AddVertex(transformed_vector_b);
 
 			Edge* edge = new Edge(transformed_vector_a, transformed_vector_b);
+			if (wireframe) {
+				edge->SetWireframe(true);
+			}
 			polygon->AddEdge(edge);
 
 			transformed_vector_a = transformed_vector_b;
@@ -33,6 +40,9 @@ void Scene::AddObject(Object* object, Matrix *C)
 
 		// Add final edge
 		Edge* final_edge = new Edge(transformed_vector_a, first_vertex);
+		if (wireframe) {
+			final_edge->SetWireframe(true);
+		}
 
 		polygon->AddEdge(final_edge);
 

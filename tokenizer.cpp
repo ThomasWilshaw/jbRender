@@ -9,7 +9,8 @@
 
 Tokenizer::Tokenizer(const std::string filename, Scene* scene, Renderer* renderer):
     scene_(scene),
-    renderer_(renderer)
+    renderer_(renderer),
+    wireframe_state_(false)
 {
     C = new Matrix();
     C->SetIdentity();
@@ -52,7 +53,25 @@ Tokenizer::Tokenizer(const std::string filename, Scene* scene, Renderer* rendere
         }
 
         if (!line.compare(0, 4, "WIRE")) {
-            renderer_->SetWireFrameMode(true);
+            std::string wire;
+
+            iss >> trash;
+            iss >> wire;
+
+            if (wire == "TRUE") {
+                wireframe_state_ = true;
+            }
+            else if (wire == "FALSE") {
+                wireframe_state_ = false;
+            }
+            else {
+                if (wire == "") {
+                    std::cout << "ERROR: Invalid syntax: " << line << " Missing argument type BOOL" << std::endl;
+                }
+                else {
+                    std::cout << "ERROR: Invalid syntax: " << line << " Unknown value: " << wire << std::endl;
+                }
+            }
             continue;
         }
 
@@ -130,7 +149,7 @@ Tokenizer::Tokenizer(const std::string filename, Scene* scene, Renderer* rendere
 
             Object* object = GetObjectFromName(object_name);
             if (object) {
-                scene_->AddObject(object, C);
+                scene_->AddObject(object, C, wireframe_state_);
             }
 
         } else if (!line.compare(0, 4, "PUSH")){
