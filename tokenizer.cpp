@@ -27,8 +27,10 @@ Tokenizer::Tokenizer(const std::string filename, Scene* scene, Renderer* rendere
     }
 
     std::string line;
+    line_number_ = 0;
     while (!in.eof()) {
         std::getline(in, line);
+        line_number_++;
         std::istringstream iss(line.c_str());
         char trash[5];
 
@@ -43,6 +45,7 @@ Tokenizer::Tokenizer(const std::string filename, Scene* scene, Renderer* rendere
         if (!line.compare(0, 2, "/*")) {
             while (!in.eof()){
                 std::getline(in, line);
+                line_number_++;
                 std::istringstream itt(line.c_str());
 
                 if (!line.compare(0, 2, "*/")) {
@@ -66,10 +69,10 @@ Tokenizer::Tokenizer(const std::string filename, Scene* scene, Renderer* rendere
             }
             else {
                 if (wire == "") {
-                    std::cout << "ERROR: Invalid syntax: " << line << " Missing argument type BOOL" << std::endl;
+                    Error(line, "Missing argument type BOOL");
                 }
                 else {
-                    std::cout << "ERROR: Invalid syntax: " << line << " Unknown value: " << wire << std::endl;
+                    Error(line, "Unknown value", wire);
                 }
             }
             continue;
@@ -161,7 +164,7 @@ Tokenizer::Tokenizer(const std::string filename, Scene* scene, Renderer* rendere
         }else if(!line.compare(0, 4, "PRMT")) {
             C->PrintMatrix();
         } else {
-            std::cout << "ERROR: Invalid syntax: " << line << std::endl;
+            Error(line);
         }
     }
 
@@ -192,7 +195,7 @@ Object* Tokenizer::GetObjectFromName(std::string obj)
         return obj_list_.at(0);
     }
 
-    std::cout << "ERROR: Invalid object: " << obj << std::endl;
+    Error("", "ERROR: Invalid object", obj);
     return nullptr;
 }
 
@@ -218,4 +221,20 @@ void Tokenizer::LoadObjects()
 
     Object* b_cube = new Object("..\\..\\..\\objects\\extrude_cube.obj");
     obj_list_.push_back(b_cube);
+}
+
+void Tokenizer::Error(std::string line, std::string message, std::string var)
+{
+    std::cout << "Error on line: " << line_number_ << ". ";
+    
+    if (line != "") {
+        std::cout << "Invalid syntax: " << line << std::endl;
+    }
+
+    if (message != "") {
+        std::cout << message << std::endl;
+    }
+    if (var != "") {
+        std::cout << "Value given: " << var << std::endl;
+    }
 }

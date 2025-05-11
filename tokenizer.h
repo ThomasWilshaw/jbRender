@@ -16,6 +16,8 @@ class Tokenizer
 public:
 	Tokenizer(const std::string filename, Scene* scene, Renderer* renderer);
 
+	void Error(std::string line  = "", std::string message = "", std::string var = "");
+
 private:
 	void LoadObjects();
 	Object* GetObjectFromName(std::string obj);
@@ -29,6 +31,7 @@ private:
 	Renderer* renderer_;
 
 	bool wireframe_state_;
+	int line_number_;
 };
 
 #endif
