@@ -173,6 +173,9 @@ Tokenizer::Tokenizer(const std::string filename, Scene* scene, Renderer* rendere
 
 Object* Tokenizer::GetObjectFromName(std::string obj)
 {
+    if (obj.compare(0, 13, "STACKED_CUBES") == 0) {
+        return obj_list_.at(7);
+    }
     if (obj.compare(0, 6, "B_CUBE") == 0) {
         return obj_list_.at(6);
     }
@@ -221,6 +224,9 @@ void Tokenizer::LoadObjects()
 
     Object* b_cube = new Object("..\\..\\..\\objects\\extrude_cube.obj");
     obj_list_.push_back(b_cube);
+
+    Object* cube_array = new Object("..\\..\\..\\objects\\cube_array.obj");
+    obj_list_.push_back(cube_array);
 }
 
 void Tokenizer::Error(std::string line, std::string message, std::string var)
