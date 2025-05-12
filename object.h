@@ -20,7 +20,7 @@ public:
 	vertices Vertices() { return verts_; };
 
 	//vec3 Vertex(int i);
-	//vec3 Vertex(int poly, int vert);
+	vec3 Vertex(int poly, int vert);
 
 	void PrintVerts();
 	void PrintPolys();

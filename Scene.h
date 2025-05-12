@@ -2,12 +2,11 @@
 #define SCENE_H
 
 #include <vector>
-#include "edge.h"
-#include "edge.h"
+#include <unordered_map>
+
+#include "data.h"
 #include "maths.h"
 #include "object.h"
-#include "polygon.h"
-
 
 // Stores all the actual polygons in their transformed state.
 class Scene
@@ -15,17 +14,18 @@ class Scene
 public:
 	Scene();
 
-	void AddObject(Object* object, Matrix* C, bool wireframe);
+	// Adds the object vertices and polygons to the scene's lists
+	// Doesn't handle edges
+	void AddObject(std::string object, Matrix* C, bool wireframe);
 
-	void Clear();
+	std::vector<polygon> GetPolygons() { return scene_polys_; };
 
-	std::vector<Edge*> GetEdges() { return scene_edges_; };
-	std::vector<Polygon*> GetPolygons() { return scene_polys_; };
+	// Unique objects in scene
+	std::unordered_map<std::string, Object*> scene_objects_;
 
-
-private:
-	std::vector<Edge*> scene_edges_;
-	std::vector<Polygon*> scene_polys_;
+	vertices scene_vertices_;
+	std::vector<polygon> scene_polys_;
+	int current_object_number_;
 
 };
 

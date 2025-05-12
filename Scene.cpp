@@ -1,70 +1,43 @@
 #include "Scene.h"
 
-Scene::Scene()
+Scene::Scene() :
+	current_object_number_(0)
 {}
 
-void Scene::AddObject(Object* object, Matrix *C, bool wireframe)
+void Scene::AddObject(std::string object_name, Matrix *C, bool wireframe)
 {
-	for (int i = 0; i < object->PolyCount(); i++) {
-		Polygon* polygon = new Polygon();
+	Object* object = scene_objects_.at(object_name);
+
+	int polygon_offset = current_object_number_ * object->Vertices().x.size();
+
+	// Copy vertices into scene vertices and transform them via matrix C
+	for (int i = 0; i < object->Vertices().x.size(); i++) {
+		double x = object->Vertices().x[i];
+		double y = object->Vertices().y[i];
+		double z = object->Vertices().z[i];
+		double w = object->Vertices().w[i];
+
+		TransformVector(&x, &y, &z, &w, C);
+
+		scene_vertices_.x.push_back(x);
+		scene_vertices_.y.push_back(y);
+		scene_vertices_.z.push_back(z);
+		scene_vertices_.w.push_back(w);
+	}
+
+	// Copy objects polygons into the scenes polygon list and
+	// update the polygons data and flags
+	for (int poly = 0; poly < object->PolyCount(); poly++) {
+		polygon new_polygon;
 
 		if (wireframe) {
-			polygon->SetWireframe(true);
+			new_polygon.wire = true;
 		}
 
-		// Polygon stores a list of vertices and a list edges which point to them
-		vec4* transformed_vector_a;
-		vec4* transformed_vector_b;
+		new_polygon.object_offset = polygon_offset;
+		new_polygon.vertices = object->Polygons()[poly].vertices;
+		new_polygon.cull = false;
 
-		// Create first vertex and addto polygon
-		transformed_vector_a = TransformVector(object->Vert(i, 0), C);
-		polygon->AddVertex(transformed_vector_a);
-
-		// Save pointer to first vertex
-		vec4* first_vertex = transformed_vector_a;
-
-		// Loop through remaining vertices and add each new vertex and edge
-		for (int j = 1; j < object->Polys()[i].vert_count; j++) {
-			transformed_vector_b = TransformVector(object->Vert(i, j), C);
-
-			polygon->AddVertex(transformed_vector_b);
-
-			Edge* edge = new Edge(transformed_vector_a, transformed_vector_b);
-			if (wireframe) {
-				edge->SetWireframe(true);
-			}
-			polygon->AddEdge(edge);
-
-			transformed_vector_a = transformed_vector_b;
-		}
-
-		// Add final edge
-		Edge* final_edge = new Edge(transformed_vector_a, first_vertex);
-		if (wireframe) {
-			final_edge->SetWireframe(true);
-		}
-
-		polygon->AddEdge(final_edge);
-
-		scene_polys_.push_back(polygon);
+		scene_polys_.push_back(new_polygon);
 	}
-}
-
-void Scene::Clear()
-{
-	for (auto edge : scene_edges_) {
-		for (auto vert : edge->GetVerticies()) {
-			delete vert;
-		}
-		delete edge;
-	}
-	scene_edges_.clear();
-
-	for (auto polygon : scene_polys_) {
-		polygon->GetVertices().clear();
-		delete polygon;
-	}
-	scene_polys_.clear();
-
-
 }

@@ -17,9 +17,10 @@ struct vertices
 // Also includes flags cull and wire
 struct polygon
 {
-	std::vector<int> vertices;
-	bool cull;
-	bool wire;
+	std::vector<int> vertices; // Index of vertices
+	int object_offset;         // Offset in Scene vertex list for this polygons object
+	bool cull;                 // To cull or not to cull?
+	bool wire;                 // Render as wireframe
 };
 
 // Stores a list of edges as two arrays of end points

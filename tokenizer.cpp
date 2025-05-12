@@ -151,9 +151,17 @@ Tokenizer::Tokenizer(const std::string filename, Scene* scene, Renderer* rendere
             iss >> trash;
             iss >> object_name;
 
-            Object* object = GetObjectFromName(object_name);
-            if (object) {
-                scene_->AddObject(object, C, wireframe_state_);
+            // If object has not been draw before this frame add it to the scene
+            // dictionary and then add the polys and verts etc.
+            if (scene_->scene_objects_.count(object_name) == 0) {
+                Object* object = GetObjectFromName(object_name);
+                if (object) {
+                    scene_->scene_objects_[object_name] = object;
+                    scene_->AddObject(object_name, C, wireframe_state_);
+                }
+            }
+            else {
+                scene_->AddObject(object_name, C, wireframe_state_);
             }
 
         } else if (!line.compare(0, 4, "PUSH")){

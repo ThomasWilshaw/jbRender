@@ -73,6 +73,7 @@ Object::Object(const std::string filename)
             }
             p.cull = false;
             p.wire = false;
+            p.object_offset = -1;
             polys_[polygon_count] = p;
             polygon_count++;
         }
@@ -84,6 +85,18 @@ Object::Object(const std::string filename)
 int Object::PolyCount()
 {
     return polys_.size();
+}
+
+vec3 Object::Vertex(int polygon, int vert)
+{
+    int vertex = polys_[polygon].vertices[vert];
+
+    vec3 out;
+    out.x = verts_.x[vertex];
+    out.y = verts_.y[vertex];
+    out.z = verts_.z[vertex];
+
+    return out;
 }
 
 void Object::PrintVerts()

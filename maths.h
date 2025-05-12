@@ -92,6 +92,19 @@ static vec4* TransformVector(vec4 v, Matrix* C) {
 	return output;
 }
 
+// Multiply vec4 vaules in place
+static void TransformVector(double* x, double* y, double*z, double* w, Matrix* C) {
+	double x_copy = *x;
+	double y_copy = *y;
+	double z_copy = *z;
+	double w_copy = *w;
+
+	*x = x_copy * C->data()[0][0] + y_copy * C->data()[1][0] + z_copy * C->data()[2][0] + w_copy * C->data()[3][0];
+	*y = x_copy * C->data()[0][1] + y_copy * C->data()[1][1] + z_copy * C->data()[2][1] + w_copy * C->data()[3][1];
+	*z = x_copy * C->data()[0][2] + y_copy * C->data()[1][2] + z_copy * C->data()[2][2] + w_copy * C->data()[3][2];
+	*w = x_copy * C->data()[0][3] + y_copy * C->data()[1][3] + z_copy * C->data()[2][3] + w_copy * C->data()[3][3];
+}
+
 // Multiply a vec3 by a 4x4 matrix (set w to 1.0)
 // Returns a pointer to a new vec4
 static vec4* TransformVector(vec3 v, Matrix* C)
