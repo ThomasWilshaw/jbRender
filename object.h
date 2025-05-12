@@ -5,6 +5,7 @@
 #include <vector>
 
 #include "maths.h"
+#include "data.h"
 
 // Basic data stored about an object loaded from file
 class Object
@@ -13,23 +14,20 @@ public:
 	Object(const std::string filename);
 
 	int PolyCount();
-	int VertCount() { return verts_.size(); };
+	int VerticiesCount() { return verts_.x.size(); };
 
-	std::vector<poly> Polys();
-	std::vector<vec3> Verts() { return verts_; };
+	std::vector<polygon> Polygons() { return polys_; };
+	vertices Vertices() { return verts_; };
 
-	vec3 Vert(int i) { return verts_[i]; };
-
-	vec3 Vert(int poly, int vert) {
-		return verts_[Polys()[poly].verts[vert]];
-	}
+	//vec3 Vertex(int i);
+	//vec3 Vertex(int poly, int vert);
 
 	void PrintVerts();
 	void PrintPolys();
 
 private:
-	std::vector<vec3> verts_;
-	std::vector<poly> polys_;
+	vertices verts_;
+	std::vector<polygon> polys_;
 };
 
 

@@ -16,6 +16,37 @@ Object::Object(const std::string filename)
     }
 
     std::string line;
+
+    // Count how many vertices and polygons we have
+    int vertex_count = 0;
+    int polygon_count = 0;
+    while (!in.eof()) {
+        std::getline(in, line);
+        std::istringstream iss(line.c_str());
+
+        if (!line.compare(0, 2, "v ")) {
+            vertex_count++;
+            continue;
+        }
+        if (!line.compare(0, 2, "f ")) {
+            polygon_count++;
+            continue;
+        }
+    }
+    // Reset file back to the begining
+    in.clear();
+    in.seekg(0, std::ios::beg);
+
+    verts_.x.resize(vertex_count);
+    verts_.y.resize(vertex_count);
+    verts_.z.resize(vertex_count);
+    verts_.w.resize(vertex_count);
+
+    polys_.resize(polygon_count);
+
+    // Fill arrays
+    vertex_count = 0;
+    polygon_count = 0;
     while (!in.eof()) {
         std::getline(in, line);
         std::istringstream iss(line.c_str());
@@ -23,20 +54,27 @@ Object::Object(const std::string filename)
 
         if (!line.compare(0, 2, "v ")) { // verts
             iss >> trash;
-            vec3 v;
-            iss >> v.x;
-            iss >> v.y;
-            iss >> v.z;
-            verts_.push_back(v);
+            double x, y, z = 0.0;
+            iss >> x;
+            iss >> y;
+            iss >>z;
+            verts_.x[vertex_count] = x;
+            verts_.y[vertex_count] = y;
+            verts_.z[vertex_count] = z;
+            verts_.w[vertex_count] = 1.0;
+            vertex_count++;
         } else if (!line.compare(0, 2, "f ")) { // faces
             iss >> trash;
             int v;
-            poly p;
+            polygon p;
             while (iss >> v) {
-                p.verts.push_back(v-1);
+                // obj files store vertices from 1 .. n
+                p.vertices.push_back(v-1);
             }
-            p.vert_count = p.verts.size();
-            polys_.push_back(p);
+            p.cull = false;
+            p.wire = false;
+            polys_[polygon_count] = p;
+            polygon_count++;
         }
     }
 
@@ -48,19 +86,14 @@ int Object::PolyCount()
     return polys_.size();
 }
 
-std::vector<poly> Object::Polys()
-{
-    return polys_;
-}
-
 void Object::PrintVerts()
 {
     std::cout << "---VERTS---" << std::endl;
-    for (int i = 0; i < verts_.size(); i++) {
+    for (int i = 0; i < verts_.x.size(); i++) {
         std::cout << i << ": ";
-        std::cout << verts_[i].x << ", ";
-        std::cout << verts_[i].y << ", ";
-        std::cout << verts_[i].z << std::endl;
+        std::cout << verts_.x[i] << ", ";
+        std::cout << verts_.y[i] << ", ";
+        std::cout << verts_.z[i] << std::endl;
     }
 }
 
@@ -70,8 +103,8 @@ void Object::PrintPolys()
 
     for (int i = 0; i < polys_.size(); i++) {
         std::cout << i << ": ";
-        for (int j = 0; j < polys_[i].verts.size(); j++) {
-            std::cout << polys_[i].verts[j] << " ";
+        for (int j = 0; j < polys_[i].vertices.size(); j++) {
+            std::cout << polys_[i].vertices[i] << " ";
         }
     }
 }
