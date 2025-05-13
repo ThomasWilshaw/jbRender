@@ -1,11 +1,13 @@
 #include <iostream>
 #include <sstream>
 #include <fstream>
+#include <chrono>
 
 #include "tokenizer.h"
 
 #include "maths.h"
 #include "object.h"
+#include "timer.h"
 
 Tokenizer::Tokenizer(const std::string filename, Scene* scene, Renderer* renderer):
     scene_(scene),
@@ -81,7 +83,7 @@ Tokenizer::Tokenizer(const std::string filename, Scene* scene, Renderer* rendere
         if (!line.compare(0, 6, "RENDER")) {
             renderer->Render();
             renderer->SaveImage();
-            scene->Clear();
+            //scene->Clear();
             C->SetIdentity();
             std::cout << "RENDER" << std::endl;
             continue;
@@ -213,6 +215,7 @@ Object* Tokenizer::GetObjectFromName(std::string obj)
 
 void Tokenizer::LoadObjects()
 {
+    //auto timer = Timer("Load Objects");
     Object* pyramid = new Object("..\\..\\..\\objects\\square_based_pyramid.obj");
     obj_list_.push_back(pyramid);
 

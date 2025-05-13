@@ -192,3 +192,13 @@ void Frame::MoveTo(vec4* point)
 {
     MoveTo(point->x, point->y);
 }
+
+void Frame::DrawTo(vec4 point)
+{
+    DrawTo(point.x, point.y);
+}
+
+void Frame::MoveTo(vec4 point)
+{
+    MoveTo(point.x, point.y);
+}

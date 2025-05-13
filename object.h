@@ -16,7 +16,7 @@ public:
 	int PolyCount();
 	int VerticiesCount() { return verts_.x.size(); };
 
-	std::vector<polygon> Polygons() { return polys_; };
+	std::vector<polygon>& Polygons() { return polys_; };
 	vertices Vertices() { return verts_; };
 
 	//vec3 Vertex(int i);

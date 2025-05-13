@@ -1,14 +1,14 @@
 #ifndef RENDERER_H
 #define RENDERER_H
 
-#include "edge.h"
 #include "frame.h"
 #include "maths.h"
-#include "polygon.h"
 #include "Scene.h"
 
 #include <map>
 #include <vector>
+
+#include "data.h"
 
 // Renders a Scene. Takes a Scene and a Frame
 class Renderer
@@ -26,11 +26,11 @@ public:
 
     void SaveImage();
 
-    bool FaceVertexCompare(Polygon* poly, vec4* vertex);
+    //bool FaceVertexCompare(Polygon* poly, vec4* vertex);
 
-    std::map<double, int> BoundaryEdgeCompare(Edge* edge);
+    //std::map<double, int> BoundaryEdgeCompare(Edge* edge);
     
-    Intersection EdgeEdgeCompare(Edge* edge, Edge* test_edge);
+    //Intersection EdgeEdgeCompare(Edge* edge, Edge* test_edge);
 
 private:
     
@@ -41,8 +41,8 @@ private:
 
     int frame_number_;
 
-    std::vector<Edge*> edge_list_;
-    std::vector<Edge*> boundary_edges_;
+    edges edge_list_;
+    edges boundary_edges_;
 };
 
 #endif

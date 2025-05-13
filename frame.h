@@ -3,6 +3,7 @@
 
 #include "object.h"
 #include "Scene.h"
+#include "maths.h"
 
 #ifndef FRAME_H
 #define FRAME_H
@@ -29,6 +30,9 @@ public:
 
 	void DrawTo(vec4 *point);
 	void MoveTo(vec4* point);
+
+	void DrawTo(vec4 point);
+	void MoveTo(vec4 point);
 
 	void SetLineColor(Imf::Rgba color) { line_color_ = color; };
 	void ResetLineColor() { line_color_.r = 0.0; line_color_.g = 0.0; line_color_.b = 0.0; }

@@ -25,7 +25,8 @@ public:
 
 	vertices scene_vertices_;
 	std::vector<polygon> scene_polys_;
-	int current_object_number_;
+	int current_object_offset_;
+	int object_count_;
 
 };
 

@@ -1,4 +1,5 @@
 #include "renderer.h"
+#include "timer.h"
 
 Renderer::Renderer(Scene* scene, Frame* frame) :
 	scene_(scene),
@@ -10,54 +11,76 @@ Renderer::Renderer(Scene* scene, Frame* frame) :
 
 void Renderer::Render()
 {
-    // Apply perspective transform and cull then build scene
-	// and boundary edge lists
-	for (auto polygon : scene_->GetPolygons()) {
-		polygon->ApplyProjectionTransform();
+	// Divide out w component
+	for (int i = 0; i < scene_->scene_vertices_.x.size(); i++) {
+		// Maybe slow?
+		if (scene_->scene_vertices_.w[i] == 0.0) {
+			std::cout << "Warning: divide by zero error in projection transform" << std::endl;
+		}
+		scene_->scene_vertices_.x[i] /= scene_->scene_vertices_.w[i];
+		scene_->scene_vertices_.y[i] /= scene_->scene_vertices_.w[i];
+		scene_->scene_vertices_.z[i] /= scene_->scene_vertices_.w[i];
+	}
+
+	// Cull then build scene and boundary edge lists
+	for (auto polygon : scene_->scene_polys_) {
 		// Skip polgons that are culled
-		if (polygon->CullTest() && !polygon->GetWireframe()) {
+		if (!polygon.wire && CullTest(polygon, scene_->scene_vertices_)) {
 			continue;
 		}
 
-		for (auto edge : polygon->GetEdges()) {
-			if (edge_list_.empty()) {
-				edge_list_.push_back(edge);
-			} else {
-				// Loop though edges and compare to current edge
-				// Only add to list if it isn't already there
+		// Add polygon edges to the scene edge list and boundary edge list
+		edges polygon_edges = GetEdgesFromPolygon(polygon, scene_->scene_vertices_);
+		for (int i = 0; i < polygon_edges.a.size(); i++) {
+			// Add first ever edge, only called once
+			if (edge_list_.a.empty()) {
+				edge_list_.a.push_back(polygon_edges.a[i]);
+				edge_list_.b.push_back(polygon_edges.b[i]);
+				edge_list_.boundary.push_back(true);
+			}
+			else {
+				// Check if edge is already in edge_list
 				bool already_in_list = false;
-				for (auto test_edge : edge_list_) {
-					if (edge->Compare(test_edge)) {
-						edge->SetBoundary(false);
-						test_edge->SetBoundary(false);
+				for (int j = 0; j < edge_list_.a.size(); j++) {
+					// As soon as we find a matching edge set that edge boundary status to be false and break
+					if (EdgeCompare(polygon_edges.a[i], polygon_edges.b[i], edge_list_.a[j], edge_list_.b[j])) {
+						already_in_list = true;
+						edge_list_.boundary[j] = false;
+						break;
 					}
 				}
+				// If the edge is not already in the list add it and set its boundary status to true
 				if (!already_in_list) {
-					edge_list_.push_back(edge);
+					edge_list_.a.push_back(polygon_edges.a[i]);
+					edge_list_.b.push_back(polygon_edges.b[i]);
+					edge_list_.boundary.push_back(true);
 				}
 			}
 		}
 	}
 
-	// Generate boundry list
-	for (auto edge : edge_list_) {
-		if (edge->GetBoundary() && !edge->GetWireframe()) {
-			boundary_edges_.push_back(edge);
+	// Generate boundary list
+	for (int i = 0; i < edge_list_.a.size(); i++)
+	{
+		if (edge_list_.boundary[i]) {
+			boundary_edges_.a.push_back(edge_list_.a[i]);
+			boundary_edges_.b.push_back(edge_list_.b[i]);
 		}
 	}
 
 	// Draw edges
-	for (auto edge : edge_list_) {
+	for (int i = 0; i < edge_list_.a.size(); i++) {
+		vec4 a = Vec4FromVertexList(edge_list_.a[i], scene_->scene_vertices_);
+		vec4 b = Vec4FromVertexList(edge_list_.b[i], scene_->scene_vertices_);
 
 		// If rendering a wireframe draw all edges
-		/*
-		if (wireframe_) {
-		    frame_->MoveTo(edge->GetA());
-		    frame_->DrawTo(edge->GetB());
+		if (true) {
+			frame_->MoveTo(a);
+			frame_->DrawTo(b);
 
 			continue;
-		*/
-
+		}
+		/*
 		// Generate intersection list
 		std::map<double, int> intersection_list = BoundaryEdgeCompare(edge);
 
@@ -126,12 +149,12 @@ void Renderer::Render()
 			frame_->SetLineColor(Imf::Rgba(1.0, 0.0, 0.0));
 			frame_->DrawTo(edge->GetB());
 			frame_->ResetLineColor();
-		}
+		} */
 	}
 
 	return;
 }
-
+/*
 bool Renderer::FaceVertexCompare(Polygon* poly, vec4* vertex)
 {
 	bool flag = false;
@@ -268,20 +291,21 @@ std::map<double, int> Renderer::BoundaryEdgeCompare(Edge* edge)
 
 	return intersection_list;
 }
+*/
 
 void Renderer::SaveImage()
 {
 	std::string path = "D:\\src\\jbRender\\render\\out_" + std::to_string(frame_number_) + ".exr";
 	frame_->WriteFrame(path.c_str());
 	frame_->ClearFrame();
-
+	/*
 	for (auto edge : edge_list_) {
 		delete edge;
 	}
 	edge_list_.clear();
 
 	boundary_edges_.clear();
-
+	*/
 	frame_number_++;
 }
 

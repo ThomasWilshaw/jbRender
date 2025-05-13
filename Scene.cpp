@@ -1,14 +1,16 @@
 #include "Scene.h"
 
 Scene::Scene() :
-	current_object_number_(0)
+	current_object_offset_(0),
+	object_count_(0)
 {}
 
 void Scene::AddObject(std::string object_name, Matrix *C, bool wireframe)
 {
 	Object* object = scene_objects_.at(object_name);
 
-	int polygon_offset = current_object_number_ * object->Vertices().x.size();
+	current_object_offset_ += (object_count_ == 0 ? 0 : object->Vertices().x.size());
+	object_count_++;
 
 	// Copy vertices into scene vertices and transform them via matrix C
 	for (int i = 0; i < object->Vertices().x.size(); i++) {
@@ -33,8 +35,11 @@ void Scene::AddObject(std::string object_name, Matrix *C, bool wireframe)
 		if (wireframe) {
 			new_polygon.wire = true;
 		}
+		else {
+			new_polygon.wire = false;
+		}
 
-		new_polygon.object_offset = polygon_offset;
+		new_polygon.object_offset = current_object_offset_;
 		new_polygon.vertices = object->Polygons()[poly].vertices;
 		new_polygon.cull = false;
 

@@ -3,6 +3,8 @@
 
 #include <vector>
 
+#include "maths.h"
+
 
 // Stores a set or vertices as a struct of arrays
 struct vertices
@@ -23,12 +25,32 @@ struct polygon
 	bool wire;                 // Render as wireframe
 };
 
-// Stores a list of edges as two arrays of end points
+// Stores a list of edges as two arrays of end points vertex indexes
 struct edges
 {
 	std::vector<int> a;
 	std::vector<int> b;
+	std::vector<bool> boundary;
 };
+
+inline int GetVertexRealIndex(polygon poly, int index)
+{
+	return poly.vertices[index] + poly.object_offset;
+}
+
+vec4 GetVertexFromPolygon(polygon poly, vertices vertex_list, int index);
+
+// Return a list of edge indexe pairs for a given polygon
+edges GetEdgesFromPolygon(polygon poly, vertices vertex_list);
+
+// Back face cull test
+// Does not assume projection transform has been done
+bool CullTest(polygon poly, vertices verts);
+
+// Compare to edges to see if they are the same
+bool EdgeCompare(int a_1, int b_1, int a_2, int b_2);
+
+vec4 Vec4FromVertexList(int index, vertices verts);
 
 
 #endif // DATA_H
