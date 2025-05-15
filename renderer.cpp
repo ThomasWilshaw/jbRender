@@ -222,15 +222,21 @@ Renderer::Intersection Renderer::EdgeEdgeCompare(int a_1, int b_1, int a_2, int 
 	Renderer::Intersection intersection;
 	intersection.valid = false;
 
-	const vec4 p = Vec4FromVertexList(a_1, scene_->scene_vertices_);
-	const vec4 q = Vec4FromVertexList(b_1, scene_->scene_vertices_);
+	const double p_x = scene_->scene_vertices_.x[a_1];
+	const double p_y = scene_->scene_vertices_.y[a_1];
 
-	const vec4 r = Vec4FromVertexList(a_2, scene_->scene_vertices_);
-	const vec4 s = Vec4FromVertexList(b_2, scene_->scene_vertices_);
+	const double q_x = scene_->scene_vertices_.x[b_1];
+	const double q_y = scene_->scene_vertices_.y[b_1];
+
+	const double r_x = scene_->scene_vertices_.x[a_2];
+	const double r_y = scene_->scene_vertices_.y[a_2];
+
+	const double s_x = scene_->scene_vertices_.x[b_2];
+	const double s_y = scene_->scene_vertices_.y[b_2];
 
 	// calculate d_1 and d_2
-	double d_1 = (s.x - r.x) * (p.y - r.y) - (p.x - r.x) * (s.y - r.y);
-	double d_2 = (s.x - r.x) * (q.y - r.y) - (q.x - r.x) * (s.y - r.y);
+	double d_1 = (s_x - r_x) * (p_y - r_y) - (p_x - r_x) * (s_y - r_y);
+	double d_2 = (s_x - r_x) * (q_y - r_y) - (q_x - r_x) * (s_y - r_y);
 
 	// if signs match return failed intersection
 	if (signbit(d_1 * d_2) == 0) {
@@ -238,7 +244,7 @@ Renderer::Intersection Renderer::EdgeEdgeCompare(int a_1, int b_1, int a_2, int 
 	}
 
 	// calculate d_3 and d_4
-	double d_3 = (p.x - r.x) * (q.y - r.y) - (q.x - r.x) * (p.y - r.y);
+	double d_3 = (p_x - r_x) * (q_y - r_y) - (q_x - r_x) * (p_y - r_y);
 	double d_4 = d_1 - d_2 + d_3;
 
 	// if signs match return failed intersection
@@ -255,8 +261,14 @@ Renderer::Intersection Renderer::EdgeEdgeCompare(int a_1, int b_1, int a_2, int 
 		return intersection;
 	}
 
-	double z_i = p.z + alpha * (q.z - p.z);
-	double z_j = s.z + (1 - beta) * (r.z - s.z);
+	// Only need the z values if we get this far
+	const double p_z = scene_->scene_vertices_.z[a_1];
+	const double q_z = scene_->scene_vertices_.z[b_1];
+	const double r_z = scene_->scene_vertices_.z[a_2];
+	const double s_z = scene_->scene_vertices_.z[b_2];
+
+	double z_i = p_z + alpha * (q_z - p_z);
+	double z_j = s_z + (1 - beta) * (r_z - s_z);
 
 	// If we are on the wrong side or on the plane, return
 	if (z_i < z_j) {
