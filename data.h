@@ -41,7 +41,7 @@ inline int GetVertexRealIndex(polygon poly, int index)
 vec4 GetVertexFromPolygon(polygon poly, vertices vertex_list, int index);
 
 // Return a list of edge indexe pairs for a given polygon
-edges GetEdgesFromPolygon(polygon poly, vertices vertex_list);
+edges GetEdgesFromPolygon(polygon poly);
 
 // Back face cull test
 // Does not assume projection transform has been done
@@ -50,7 +50,14 @@ bool CullTest(polygon poly, vertices verts);
 // Compare to edges to see if they are the same
 bool EdgeCompare(int a_1, int b_1, int a_2, int b_2);
 
+// Return the vec4 at verts[index]
 vec4 Vec4FromVertexList(int index, vertices verts);
+
+// Check if the given polygon contains the given edge
+bool PolygonContainsEdge(polygon poly, int a, int b);
+
+// Calculate the screen normal of a polygon
+vec3 PolygonScreenNormal(polygon poly, vertices vertex_list);
 
 
 #endif // DATA_H

@@ -14,8 +14,8 @@ vec4 GetVertexFromPolygon(polygon poly, vertices vertex_list, int index)
 	return out;
 }
 
-// Return a list of edge indexe pairs for a given polygon
-edges GetEdgesFromPolygon(polygon poly, vertices vertex_list)
+// Return a list of edge index pairs for a given polygon
+edges GetEdgesFromPolygon(polygon poly)
 {
 	int point_a, point_b;
 	edges polygon_edge_list;
@@ -88,4 +88,44 @@ vec4 Vec4FromVertexList(int index, vertices verts)
 	out.w = verts.w[index];
 
 	return out;
+}
+
+bool PolygonContainsEdge(polygon poly, int a, int b)
+{
+	int point_a = GetVertexRealIndex(poly, 0);
+	int point_b;
+
+	for (int i = 1; i < poly.vertices.size(); i++) {
+		point_b = GetVertexRealIndex(poly, i);
+
+		if (EdgeCompare(point_a, point_b, a, b)) {
+			return true;
+		}
+
+		point_a = point_b;
+	}
+
+	point_b = GetVertexRealIndex(poly, 0);
+	if (EdgeCompare(point_a, point_b, a, b)) {
+		return true;
+	}
+
+	return false;
+}
+
+vec3 PolygonScreenNormal(polygon poly, vertices vertex_list)
+{
+	const vec4 p1 = GetVertexFromPolygon(poly, vertex_list, 0);
+	const vec4 p2 = GetVertexFromPolygon(poly, vertex_list, 1);
+	const vec4 p3 = GetVertexFromPolygon(poly, vertex_list, 2);
+
+	vec4 u = Vec4Subtract(p2, p1);
+	vec4 v = Vec4Subtract(p3, p1);
+
+	vec3 cross = Vec3Cross(u, v);
+	double mag = magnitude(cross);
+
+	vec3 result = { cross.x / mag, cross.y / mag, cross.z / mag };
+
+	return result;
 }

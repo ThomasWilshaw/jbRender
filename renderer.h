@@ -26,11 +26,11 @@ public:
 
     void SaveImage();
 
-    //bool FaceVertexCompare(Polygon* poly, vec4* vertex);
+    bool FaceVertexCompare(polygon poly, vec4 vertex);
 
-    //std::map<double, int> BoundaryEdgeCompare(Edge* edge);
+    std::map<double, int> BoundaryEdgeCompare(int a, int b);
     
-    //Intersection EdgeEdgeCompare(Edge* edge, Edge* test_edge);
+    Intersection EdgeEdgeCompare(int a_1, int b_1, int a_2, int b_2);
 
 private:
     

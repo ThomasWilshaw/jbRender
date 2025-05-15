@@ -18,15 +18,13 @@ public:
 	// Doesn't handle edges
 	void AddObject(std::string object, Matrix* C, bool wireframe);
 
-	std::vector<polygon> GetPolygons() { return scene_polys_; };
+	std::vector<polygon>& GetPolygons() { return scene_polys_; };
 
 	// Unique objects in scene
 	std::unordered_map<std::string, Object*> scene_objects_;
 
 	vertices scene_vertices_;
 	std::vector<polygon> scene_polys_;
-	int current_object_offset_;
-	int object_count_;
 
 };
 

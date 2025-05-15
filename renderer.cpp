@@ -23,14 +23,15 @@ void Renderer::Render()
 	}
 
 	// Cull then build scene and boundary edge lists
-	for (auto polygon : scene_->scene_polys_) {
+	for (auto &polygon : scene_->scene_polys_) {
 		// Skip polgons that are culled
 		if (!polygon.wire && CullTest(polygon, scene_->scene_vertices_)) {
+			polygon.cull = true;
 			continue;
 		}
 
 		// Add polygon edges to the scene edge list and boundary edge list
-		edges polygon_edges = GetEdgesFromPolygon(polygon, scene_->scene_vertices_);
+		edges polygon_edges = GetEdgesFromPolygon(polygon);
 		for (int i = 0; i < polygon_edges.a.size(); i++) {
 			// Add first ever edge, only called once
 			if (edge_list_.a.empty()) {
@@ -70,30 +71,32 @@ void Renderer::Render()
 
 	// Draw edges
 	for (int i = 0; i < edge_list_.a.size(); i++) {
-		vec4 a = Vec4FromVertexList(edge_list_.a[i], scene_->scene_vertices_);
-		vec4 b = Vec4FromVertexList(edge_list_.b[i], scene_->scene_vertices_);
+		int a_index = edge_list_.a[i];
+		int b_index = edge_list_.b[i];
+		vec4 a = Vec4FromVertexList(a_index, scene_->scene_vertices_);
+		vec4 b = Vec4FromVertexList(b_index, scene_->scene_vertices_);
 
 		// If rendering a wireframe draw all edges
-		if (true) {
+		if (false) {
 			frame_->MoveTo(a);
 			frame_->DrawTo(b);
 
 			continue;
 		}
-		/*
+
 		// Generate intersection list
-		std::map<double, int> intersection_list = BoundaryEdgeCompare(edge);
+		std::map<double, int> intersection_list = BoundaryEdgeCompare(a_index, b_index);
 
 		// Normal render
 		float QI = 0;
 
 		// Initilise QI
-		for (auto polygon : scene_->GetPolygons()) {
-			if (!polygon->GetCull()) {
+		for (auto polygon : scene_->scene_polys_) {
+			if (!polygon.cull) {
 				// Don't compare to own polygon
-				if (!polygon->ContainsEdge(edge)) {
-					if (!polygon->GetWireframe()) {
-						if (FaceVertexCompare(polygon, edge->GetA())) {
+				if (!PolygonContainsEdge(polygon, a_index, b_index)) {
+					if (!polygon.wire) {
+						if (FaceVertexCompare(polygon, a)) {
 							QI++;
 						}
 					}
@@ -102,11 +105,8 @@ void Renderer::Render()
 		}
 
 		if (QI == 0) {
-			frame_->MoveTo(edge->GetA());
+			frame_->MoveTo(a);
 		}
-
-		const vec4 a = *edge->GetA();
-		const vec4 b = *edge->GetB();
 
 		std::string sequence = std::to_string(QI);
 		bool error = false;
@@ -136,7 +136,7 @@ void Renderer::Render()
 		}
 
 		if (QI == 0) {
-			frame_->DrawTo(edge->GetB());
+			frame_->DrawTo(b);
 		}
 		if (error) {
 			std::cout << "---ERROR--- QI < 0" << std::endl;
@@ -147,42 +147,42 @@ void Renderer::Render()
 			}
 			std::cout << std::endl;
 			frame_->SetLineColor(Imf::Rgba(1.0, 0.0, 0.0));
-			frame_->DrawTo(edge->GetB());
+			frame_->DrawTo(b);
 			frame_->ResetLineColor();
-		} */
+		}
 	}
 
 	return;
 }
-/*
-bool Renderer::FaceVertexCompare(Polygon* poly, vec4* vertex)
+
+bool Renderer::FaceVertexCompare(polygon poly, vec4 vertex)
 {
 	bool flag = false;
-
 	bool on_corner = false;
 
-	for each(vec4* test_vertex in poly->GetVertices()) {
-		if (vertex->x == test_vertex->x && vertex->y == test_vertex->y) {
-			//std::cout << "Vertex on corner" << std::endl;
+	for (int i = 0; i < poly.vertices.size(); i++) {
+		vec4 test_vertex = GetVertexFromPolygon(poly, scene_->scene_vertices_, i);
+		if (vertex.x == test_vertex.x && vertex.y == test_vertex.y) {
 			flag = true;
 			on_corner = true;
 		}
 	}
 
+	edges polygon_edges = GetEdgesFromPolygon(poly);
 
-	for (auto edge : poly->GetEdges()) {
-		const vec4 v_i = *edge->GetA();
-		const vec4 v_i_plus_1 = *edge->GetB();
+	for (int i = 0; i < polygon_edges.a.size(); i++) {
+		const vec4 v_i = Vec4FromVertexList(polygon_edges.a[i], scene_->scene_vertices_);
+		const vec4 v_i_plus_1 = Vec4FromVertexList(polygon_edges.b[i], scene_->scene_vertices_);
 
-		double d_i = v_i.y - vertex->y;
-		double d_i_plus_1 = v_i_plus_1.y - vertex->y;
+		double d_i = v_i.y - vertex.y;
+		double d_i_plus_1 = v_i_plus_1.y - vertex.y;
 
 		if (signbit(d_i * d_i_plus_1) == 0) {
 			continue;
 		}
 
 		double d_inf = v_i_plus_1.y - v_i.y;
-		double d = (v_i_plus_1.y - vertex->y) * (v_i.x - vertex->x) - (v_i_plus_1.x - vertex->x) * (v_i.y - vertex->y);
+		double d = (v_i_plus_1.y - vertex.y) * (v_i.x - vertex.x) - (v_i_plus_1.x - vertex.x) * (v_i.y - vertex.y);
 		if (signbit(d * d_inf) == 0) {
 			continue;
 		}
@@ -198,32 +198,32 @@ bool Renderer::FaceVertexCompare(Polygon* poly, vec4* vertex)
 		// Dot product normal and this vector and rearrange to find the z of this imaginary point
 		// if actual z is greater than imaginary z the point is behind plane as z axis goes away form eye.
 
-		vec3 normal = poly->GetScreenNormal();
-		vec4 point_on_plane = *poly->GetVertices().at(0);
+		vec3 normal = PolygonScreenNormal(poly, scene_->scene_vertices_);
+		vec4 point_on_plane = GetVertexFromPolygon(poly, scene_->scene_vertices_, 0);
 
-		double z = ((normal.x * (vertex->x - point_on_plane.x) + normal.y * (vertex->y - point_on_plane.y)) / -normal.z) + point_on_plane.z;
+		double z = ((normal.x * (vertex.x - point_on_plane.x) + normal.y * (vertex.y - point_on_plane.y)) / -normal.z) + point_on_plane.z;
 
-		if (abs(z - vertex->z) < 0.001) {
+		if (abs(z - vertex.z) < 0.001) {
 			return false;
 		}
 
-		if (z < vertex->z) {
+		if (z < vertex.z) {
 			return true;
 		}
 	}
 	return false;
 }
 
-Renderer::Intersection Renderer::EdgeEdgeCompare(Edge* edge, Edge* test_edge)
+Renderer::Intersection Renderer::EdgeEdgeCompare(int a_1, int b_1, int a_2, int b_2)
 {
 	Renderer::Intersection intersection;
 	intersection.valid = false;
 
-	const vec4 p = *edge->GetA();
-	const vec4 q = *edge->GetB();
+	const vec4 p = Vec4FromVertexList(a_1, scene_->scene_vertices_);
+	const vec4 q = Vec4FromVertexList(b_1, scene_->scene_vertices_);
 
-	const vec4 r = *test_edge->GetA();
-	const vec4 s = *test_edge->GetB();
+	const vec4 r = Vec4FromVertexList(a_2, scene_->scene_vertices_);
+	const vec4 s = Vec4FromVertexList(b_2, scene_->scene_vertices_);
 
 	// calculate d_1 and d_2
 	double d_1 = (s.x - r.x) * (p.y - r.y) - (p.x - r.x) * (s.y - r.y);
@@ -275,14 +275,19 @@ Renderer::Intersection Renderer::EdgeEdgeCompare(Edge* edge, Edge* test_edge)
 	return intersection;
 }
 
-std::map<double, int> Renderer::BoundaryEdgeCompare(Edge* edge)
+std::map<double, int> Renderer::BoundaryEdgeCompare(int a, int b)
 {
 	std::map<double, int> intersection_list;
-	for (auto boundary_edge : boundary_edges_) {
-		if (edge->Compare(boundary_edge)) {
+	int boundary_edge_a;
+	int boundary_edge_b;
+	for (int i = 0; i < boundary_edges_.a.size(); i++) {
+		boundary_edge_a = boundary_edges_.a[i];
+		boundary_edge_b = boundary_edges_.b[i];
+		if (EdgeCompare(a, b, boundary_edge_a, boundary_edge_b)) {
 			continue;
 		}
-		Renderer::Intersection intersection = EdgeEdgeCompare(edge, boundary_edge);
+
+		Renderer::Intersection intersection = EdgeEdgeCompare(a, b, boundary_edge_a, boundary_edge_b);
 
 		if (intersection.valid) {
 			intersection_list.emplace(intersection.alpha, intersection.deltaIQ);
@@ -291,7 +296,6 @@ std::map<double, int> Renderer::BoundaryEdgeCompare(Edge* edge)
 
 	return intersection_list;
 }
-*/
 
 void Renderer::SaveImage()
 {
