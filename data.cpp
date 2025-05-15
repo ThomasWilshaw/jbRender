@@ -1,7 +1,7 @@
 #include "data.h"
 
 
-vec4 GetVertexFromPolygon(polygon poly, vertices vertex_list, int index)
+vec4 GetVertexFromPolygon(const polygon& poly, const vertices& vertex_list, const int& index)
 {
 	vec4 out;
 	int real_index = poly.vertices[index] + poly.object_offset;
@@ -39,7 +39,7 @@ edges GetEdgesFromPolygon(polygon poly)
 
 // Back face cull test
 // Does not assume projection transform has been done
-bool CullTest(polygon poly, vertices verts)
+bool CullTest(polygon& poly, const vertices& verts)
 {
 	double sum = 0;
 	vec4 n;
@@ -79,7 +79,7 @@ bool EdgeCompare(int a_1, int b_1, int a_2, int b_2)
 	return false;
 }
 
-vec4 Vec4FromVertexList(int index, vertices verts)
+vec4 Vec4FromVertexList(int index, const vertices& verts)
 {
 	vec4 out;
 	out.x = verts.x[index];
@@ -90,7 +90,7 @@ vec4 Vec4FromVertexList(int index, vertices verts)
 	return out;
 }
 
-bool PolygonContainsEdge(polygon poly, int a, int b)
+bool PolygonContainsEdge(const polygon& poly, int a, int b)
 {
 	int point_a = GetVertexRealIndex(poly, 0);
 	int point_b;
@@ -113,7 +113,7 @@ bool PolygonContainsEdge(polygon poly, int a, int b)
 	return false;
 }
 
-vec3 PolygonScreenNormal(polygon poly, vertices vertex_list)
+vec3 PolygonScreenNormal(const polygon& poly, const vertices& vertex_list)
 {
 	const vec4 p1 = GetVertexFromPolygon(poly, vertex_list, 0);
 	const vec4 p2 = GetVertexFromPolygon(poly, vertex_list, 1);

@@ -26,7 +26,7 @@ public:
 
     void SaveImage();
 
-    bool FaceVertexCompare(polygon poly, vec4 vertex);
+    bool FaceVertexCompare(const polygon& poly, vec4 vertex);
 
     std::map<double, int> BoundaryEdgeCompare(int a, int b);
     

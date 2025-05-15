@@ -11,6 +11,8 @@ Renderer::Renderer(Scene* scene, Frame* frame) :
 
 void Renderer::Render()
 {
+	std::cout << std::to_string(scene_->scene_vertices_.x.size()) << std::endl;
+	Timer t1("Full render");
 	// Divide out w component
 	for (int i = 0; i < scene_->scene_vertices_.x.size(); i++) {
 		// Maybe slow?
@@ -68,7 +70,7 @@ void Renderer::Render()
 			boundary_edges_.b.push_back(edge_list_.b[i]);
 		}
 	}
-
+	Timer t2("Full render no preprocess");
 	// Draw edges
 	for (int i = 0; i < edge_list_.a.size(); i++) {
 		int a_index = edge_list_.a[i];
@@ -88,10 +90,10 @@ void Renderer::Render()
 		std::map<double, int> intersection_list = BoundaryEdgeCompare(a_index, b_index);
 
 		// Normal render
-		float QI = 0;
+		int QI = 0;
 
 		// Initilise QI
-		for (auto polygon : scene_->scene_polys_) {
+		for (const auto &polygon : scene_->scene_polys_) {
 			if (!polygon.cull) {
 				// Don't compare to own polygon
 				if (!PolygonContainsEdge(polygon, a_index, b_index)) {
@@ -140,7 +142,7 @@ void Renderer::Render()
 		}
 		if (error) {
 			std::cout << "---ERROR--- QI < 0" << std::endl;
-			std::cout << sequence << std::endl;
+			//std::cout << sequence << std::endl;
 			for (auto it = intersection_list.cbegin(); it != intersection_list.cend(); ++it)
 			{
 				std::cout << std::to_string(it->first) << " " << std::to_string(it->second) << "|";
@@ -155,34 +157,35 @@ void Renderer::Render()
 	return;
 }
 
-bool Renderer::FaceVertexCompare(polygon poly, vec4 vertex)
+bool Renderer::FaceVertexCompare(const polygon& poly, vec4 vertex)
 {
 	bool flag = false;
-	bool on_corner = false;
 
+	int index_i = 0;
+	int index_i_plus_1 = 0;
 	for (int i = 0; i < poly.vertices.size(); i++) {
-		vec4 test_vertex = GetVertexFromPolygon(poly, scene_->scene_vertices_, i);
-		if (vertex.x == test_vertex.x && vertex.y == test_vertex.y) {
-			flag = true;
-			on_corner = true;
-		}
-	}
+		index_i = poly.vertices[i];
+		index_i_plus_1 = poly.vertices[i+1 == poly.vertices.size() ? 0 : i+1];
 
-	edges polygon_edges = GetEdgesFromPolygon(poly);
+		index_i = index_i + poly.object_offset;
+		index_i_plus_1 = index_i_plus_1 + poly.object_offset;
 
-	for (int i = 0; i < polygon_edges.a.size(); i++) {
-		const vec4 v_i = Vec4FromVertexList(polygon_edges.a[i], scene_->scene_vertices_);
-		const vec4 v_i_plus_1 = Vec4FromVertexList(polygon_edges.b[i], scene_->scene_vertices_);
+		double v_i_y = scene_->scene_vertices_.y[index_i];
+		double v_i_plus_1_y = scene_->scene_vertices_.y[index_i_plus_1];
 
-		double d_i = v_i.y - vertex.y;
-		double d_i_plus_1 = v_i_plus_1.y - vertex.y;
+		double v_i_x = scene_->scene_vertices_.x[index_i];
+		double v_i_plus_1_x = scene_->scene_vertices_.x[index_i_plus_1];
+
+
+		double d_i = v_i_y - vertex.y;
+		double d_i_plus_1 = v_i_plus_1_y - vertex.y;
 
 		if (signbit(d_i * d_i_plus_1) == 0) {
 			continue;
 		}
 
-		double d_inf = v_i_plus_1.y - v_i.y;
-		double d = (v_i_plus_1.y - vertex.y) * (v_i.x - vertex.x) - (v_i_plus_1.x - vertex.x) * (v_i.y - vertex.y);
+		double d_inf = v_i_plus_1_y - v_i_y;
+		double d = (v_i_plus_1_y - vertex.y) * (v_i_x - vertex.x) - (v_i_plus_1_x - vertex.x) * (v_i_y - vertex.y);
 		if (signbit(d * d_inf) == 0) {
 			continue;
 		}
