@@ -71,6 +71,8 @@ void Renderer::Render()
 		}
 	}
 	Timer t2("Full render no preprocess");
+	std::map<int, int> pre_found_QI;
+
 	// Draw edges
 	for (int i = 0; i < edge_list_.a.size(); i++) {
 		int a_index = edge_list_.a[i];
@@ -93,13 +95,20 @@ void Renderer::Render()
 		int QI = 0;
 
 		// Initilise QI
-		for (const auto &polygon : scene_->scene_polys_) {
-			if (!polygon.cull) {
-				// Don't compare to own polygon
-				if (!PolygonContainsEdge(polygon, a_index, b_index)) {
-					if (!polygon.wire) {
-						if (FaceVertexCompare(polygon, a)) {
-							QI++;
+
+		// See if we have already calculated QI
+		if (pre_found_QI.count(a_index)) {
+			QI = pre_found_QI[a_index];
+		}
+		else {
+			for (const auto& polygon : scene_->scene_polys_) {
+				if (!polygon.cull) {
+					// Don't compare to own polygon
+					if (!PolygonContainsEdge(polygon, a_index, b_index)) {
+						if (!polygon.wire) {
+							if (FaceVertexCompare(polygon, a)) {
+								QI++;
+							}
 						}
 					}
 				}
@@ -140,6 +149,10 @@ void Renderer::Render()
 		if (QI == 0) {
 			frame_->DrawTo(b);
 		}
+
+		// Save QI value
+		pre_found_QI[b_index] = QI;
+
 		if (error) {
 			std::cout << "---ERROR--- QI < 0" << std::endl;
 			//std::cout << sequence << std::endl;
