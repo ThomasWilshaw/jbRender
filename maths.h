@@ -119,7 +119,7 @@ static vec4* TransformVector(vec3 v, Matrix* C)
 }
 
 // Divide a vec4 by w. Returns a vec3
-static vec3 DivideByW(vec4 v)
+static vec3 DivideByW(const vec4& v)
 {
 	vec3 output;
 	if (v.w != 0) {
@@ -144,7 +144,7 @@ static double magnitude(vec4 v)
 	return sqrt(sum);
 }
 
-static double magnitude(vec3 v)
+static double magnitude(const vec3& v)
 {
 	vec4 temp = { v.x, v.y, v.z, 0.0 };
 	return magnitude(temp);;
@@ -160,7 +160,7 @@ static vec3 Vec3Subtract(vec3 a, vec3 b)
 	return result;
 }
 
-static vec4 Vec4Subtract(vec4 a, vec4 b)
+static vec4 Vec4Subtract(const vec4& a, const vec4& b)
 {
 	vec4 result;
 	result.x = a.x - b.x;
@@ -194,7 +194,7 @@ static vec3 Vec3Cross(vec3 a, vec3 b)
 	return result;
 }
 
-static vec3 Vec3Cross(vec4 a, vec4 b)
+static vec3 Vec3Cross(vec4& a, vec4& b)
 {
 	vec3 result = { 0.0, 0.0, 0.0 };
 

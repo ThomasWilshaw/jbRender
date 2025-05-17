@@ -164,18 +164,11 @@ bool Renderer::FaceVertexCompare(const polygon& poly, vec4 vertex)
 	int index_i = 0;
 	int index_i_plus_1 = 0;
 	for (int i = 0; i < poly.vertices.size(); i++) {
-		index_i = poly.vertices[i];
-		index_i_plus_1 = poly.vertices[i+1 == poly.vertices.size() ? 0 : i+1];
-
-		index_i = index_i + poly.object_offset;
-		index_i_plus_1 = index_i_plus_1 + poly.object_offset;
+		index_i = poly.vertices[i] + poly.object_offset;
+		index_i_plus_1 = poly.vertices[i+1 == poly.vertices.size() ? 0 : i+1] + poly.object_offset;
 
 		double v_i_y = scene_->scene_vertices_.y[index_i];
 		double v_i_plus_1_y = scene_->scene_vertices_.y[index_i_plus_1];
-
-		double v_i_x = scene_->scene_vertices_.x[index_i];
-		double v_i_plus_1_x = scene_->scene_vertices_.x[index_i_plus_1];
-
 
 		double d_i = v_i_y - vertex.y;
 		double d_i_plus_1 = v_i_plus_1_y - vertex.y;
@@ -183,6 +176,9 @@ bool Renderer::FaceVertexCompare(const polygon& poly, vec4 vertex)
 		if (signbit(d_i * d_i_plus_1) == 0) {
 			continue;
 		}
+
+		double v_i_x = scene_->scene_vertices_.x[index_i];
+		double v_i_plus_1_x = scene_->scene_vertices_.x[index_i_plus_1];
 
 		double d_inf = v_i_plus_1_y - v_i_y;
 		double d = (v_i_plus_1_y - vertex.y) * (v_i_x - vertex.x) - (v_i_plus_1_x - vertex.x) * (v_i_y - vertex.y);
