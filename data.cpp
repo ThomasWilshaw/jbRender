@@ -68,9 +68,11 @@ bool CullTest(polygon& poly, const vertices& verts)
 }
 
 // Compare to edges to see if they are the same
+// Edge 1 = a_1, b_1
+// Edge 2 = a_2, b_2
 bool EdgeCompare(int a_1, int b_1, int a_2, int b_2)
 {
-	if (a_1 == b_1 && a_2 == b_2) {
+	if (a_1 == a_2 && b_1 == b_2) {
 		return true;
 	}
 	if (a_1 == b_2 && a_2 == b_1) {

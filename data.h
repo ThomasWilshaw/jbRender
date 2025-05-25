@@ -48,6 +48,8 @@ edges GetEdgesFromPolygon(polygon poly);
 bool CullTest(polygon& poly, const vertices& verts);
 
 // Compare to edges to see if they are the same
+// Edge 1 = a_1, b_1
+// Edge 2 = a_2, b_2
 bool EdgeCompare(int a_1, int b_1, int a_2, int b_2);
 
 // Return the vec4 at verts[index]
