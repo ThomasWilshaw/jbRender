@@ -47,7 +47,7 @@ void Matrix::SetPerspective(double alpha, double zn, double zf)
 	data_[1][1] = c;
 	data_[2][2] = Q;
 	data_[2][3] = s;
-	data_[3][2] = -Q * zn;
+	data_[3][2] = -1.0 * Q * zn;
 }
 
 void Matrix::SetTranslate(double x, double y, double z)

@@ -216,6 +216,9 @@ static bool Vec4Compare(vec4 a, vec4 b)
 	return x && y && z && w;
 }
 
-
+static void Vec4Print(vec4 v)
+{
+	std::cout << v.x << " " << v.y << " " << v.z << " " << v.w << std::endl;
+}
 
 #endif
