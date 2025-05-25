@@ -11,7 +11,7 @@ Renderer::Renderer(Scene* scene, Frame* frame) :
 
 void Renderer::Render()
 {
-	std::cout << std::to_string(scene_->scene_vertices_.x.size()) << std::endl;
+	//std::cout << std::to_string(scene_->scene_vertices_.x.size()) << std::endl;
 	Timer t1("Full render");
 	// Divide out w component
 	for (int i = 0; i < scene_->scene_vertices_.x.size(); i++) {
@@ -88,6 +88,20 @@ void Renderer::Render()
 			continue;
 		}
 
+		std::cout << "-----" << std::endl;
+		Vec4Print(a);
+		Vec4Print(b);
+		
+
+		if (a.z < 0.0 && b.z < 0.0) {
+			std::cout << "FULL CLIP" << std::endl;
+			continue;
+		}
+
+		if (!(a.z < 0.0) != !(b.z < 0)) {
+			std::cout << "STRADLE" << std::endl;
+		}
+
 		// Generate intersection list
 		std::map<double, int> intersection_list = BoundaryEdgeCompare(a_index, b_index);
 
@@ -97,7 +111,7 @@ void Renderer::Render()
 		// Initilise QI
 
 		// See if we have already calculated QI
-		if (pre_found_QI.count(a_index)) {
+		if (false){//pre_found_QI.count(a_index)) {
 			QI = pre_found_QI[a_index];
 		}
 		else {
@@ -114,6 +128,10 @@ void Renderer::Render()
 				}
 			}
 		}
+
+		//Vec3Print(a);
+
+		//std::cout << "QI: " << QI << std::endl;
 
 		if (QI == 0) {
 			frame_->MoveTo(a);
@@ -214,8 +232,8 @@ bool Renderer::FaceVertexCompare(const polygon& poly, vec4 vertex)
 		vec4 point_on_plane = GetVertexFromPolygon(poly, scene_->scene_vertices_, 0);
 
 		double z = ((normal.x * (vertex.x - point_on_plane.x) + normal.y * (vertex.y - point_on_plane.y)) / -normal.z) + point_on_plane.z;
-
-		if (abs(z - vertex.z) < 0.001) {
+		//std::cout << vertex.z << " " << z << " diff: " << abs(z - vertex.z) << std::endl;
+		if (abs(z - vertex.z) < 0.0000001) {
 			return false;
 		}
 
@@ -284,7 +302,7 @@ Renderer::Intersection Renderer::EdgeEdgeCompare(int a_1, int b_1, int a_2, int 
 		return intersection;
 	}
 
-	if (abs(z_i - z_j) < 0.001) {
+	if (abs(z_i - z_j) < 0.00000001) {
 		return intersection;;
 	}
 
