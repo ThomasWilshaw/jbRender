@@ -39,6 +39,8 @@ edges GetEdgesFromPolygon(polygon poly)
 
 // Back face cull test
 // Does not assume projection transform has been done
+// Breaks if two vertices are equal in one axis maybe
+// change method to pre projection (page 193)
 bool CullTest(polygon& poly, const vertices& verts)
 {
 	double sum = 0;
@@ -59,12 +61,12 @@ bool CullTest(polygon& poly, const vertices& verts)
 
 	if (sum > 0) {
 		poly.cull = true;
-		return true;
 	}
 	else {
 		poly.cull = false;
-		return false;
 	}
+
+	return poly.cull;
 }
 
 // Compare to edges to see if they are the same
