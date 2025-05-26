@@ -83,7 +83,7 @@ Tokenizer::Tokenizer(const std::string filename, Scene* scene, Renderer* rendere
         if (!line.compare(0, 6, "RENDER")) {
             renderer->Render();
             renderer->SaveImage();
-            //scene->Clear();
+            renderer->Clear();
             C->SetIdentity();
             std::cout << "RENDER" << std::endl;
             continue;
