@@ -32,6 +32,8 @@ public:
     
     Intersection EdgeEdgeCompare(int a_1, int b_1, int a_2, int b_2);
 
+    void Clear();
+
 private:
     
     //double EdgeEdgeCompare(Edge* a, Edge* b);
@@ -43,6 +45,8 @@ private:
 
     edges edge_list_;
     edges boundary_edges_;
+
+    vertices w_scaled_verts_;
 };
 
 #endif
